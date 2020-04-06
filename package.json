@@ -1,7 +1,7 @@
 {
   "name": "@daaveuk/webpage",
   "version": "0.1.0",
-  "homepage": "*your.gh-page.link.goes.here*/",
+  "homepage": "https://daaveuk.github.io/webpage",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
