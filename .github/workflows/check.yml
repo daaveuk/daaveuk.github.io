@@ -7,7 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Prettify the JS Code
       - uses: hallee/eslint-action@master
         with:
           repo-token: ${{secrets.GITHUB_TOKEN}}
