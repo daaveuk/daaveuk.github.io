@@ -6,17 +6,31 @@ import Title from './components/Title/Title';
 import Hero from './components/Hero/Hero';
 import MainContent from './components/MainContent/MainContent';
 import { useDarkMode } from './hooks/useDarkMode';
+import ThemeToggle from './components/ThemeToggle/ThemeToggle';
 import Emoji from './components/Emoji/Emoji';
-import Toggle from './components/Toggle/Toggle';
+import Image from './components/Image/Image';
+import profilePic from './images/profilePic.png';
 
 const App = () => {
   const [theme, toggleTheme] = useDarkMode();
   const themeMode = theme === 'light' ? lightTheme : darkTheme;
+
+  const handleToggle = () => {
+    if (theme === 'light') {
+      toggleTheme('dark');
+    } else {
+      toggleTheme('light');
+    }
+  };
+
+  const isDarkMode = theme === 'dark';
+
   return (
     <ThemeProvider theme={themeMode}>
       <>
         <GlobalStyles />
         <Hero>
+          <Image src={profilePic} />
           <Title>Ey 'up!</Title>
         </Hero>
         <MainContent>
@@ -31,12 +45,16 @@ const App = () => {
           </p>
           <br />
           <p>Always happy for a chat! Why not drop me a line?</p>
-          <Button>Get In Touch</Button>
+          <Button>
+            <Emoji label="Email icon" symbol="📬" /> Get In Touch
+          </Button>
           <p>You can also find me here!</p>
         </MainContent>
-        <Emoji label="Sun Emoji" symbol="🌞" />
-        <Toggle />
-        <Emoji label="Moon Emoji" symbol="🌚" />
+        <ThemeToggle
+          id="themeToggle"
+          handleToggle={handleToggle}
+          value={isDarkMode}
+        />
       </>
     </ThemeProvider>
   );

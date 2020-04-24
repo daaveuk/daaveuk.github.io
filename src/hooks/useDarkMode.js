@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 
 export const useDarkMode = () => {
-  const [theme, setTheme] = useState('light');
+  const localTheme = window.localStorage.getItem('theme');
+  const [theme, setTheme] = useState(localTheme || 'light');
   const [componentMounted, setComponentMounted] = useState(false);
   const setMode = mode => {
     window.localStorage.setItem('theme', mode);
@@ -17,18 +18,13 @@ export const useDarkMode = () => {
   };
 
   useEffect(() => {
-    const localTheme = window.localStorage.getItem('theme');
-    if (localTheme) {
-      setTheme(localTheme);
-    } else {
-      const themeType =
-        window.matchMedia &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches
-          ? 'light'
-          : 'dark';
+    const themeType =
+      window.matchMedia &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'light'
+        : 'dark';
 
-      setTheme(themeType);
-    }
+    setTheme(themeType);
     setComponentMounted(true);
   }, []);
 

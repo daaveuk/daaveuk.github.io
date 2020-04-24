@@ -5,10 +5,7 @@ import styled from 'styled-components';
 const Hero = ({ children }) => (
   <header>
     <HeaderBackground>
-      <Container>
-        <TempProfilePic />
-        {children}
-      </Container>
+      <Container>{children}</Container>
     </HeaderBackground>
   </header>
 );
@@ -18,13 +15,6 @@ Hero.propTypes = {
 };
 
 export default Hero;
-
-const TempProfilePic = styled.div`
-  height: 4rem;
-  width: 4rem;
-  border-radius: 50%;
-  background-color: grey;
-`;
 
 const Container = styled.div`
   text-align: left;

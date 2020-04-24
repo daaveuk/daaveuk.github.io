@@ -17,7 +17,6 @@ const GlobalStyles = createGlobalStyle`
     font-size: 16px;
     font-family: 'Lato', sans-serif;
     padding: 0;
-    transition: all 0.25s linear;
   }`;
 
 export default GlobalStyles;

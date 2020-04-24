@@ -1,8 +1,9 @@
 export const darkTheme = {
-  body: '#363537',
-  text: '#FAFAFA',
-  toggleBorder: '#6B8096',
-  gradient: 'linear-gradient(#091236, #1E215D)',
+  body: '#45525F',
+  text: '#E9F0F8',
+  headerGradient:
+    'linear-gradient(113.53deg, #2A3541 0%, rgba(57, 70, 83, 0) 86.04%)',
+  buttonGradient: 'linear-gradient(270deg, #f58555 0%, #e67272 100%)',
 };
 
 export default darkTheme;
