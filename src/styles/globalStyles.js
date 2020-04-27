@@ -17,6 +17,11 @@ const GlobalStyles = createGlobalStyle`
     font-size: 16px;
     font-family: 'Lato', sans-serif;
     padding: 0;
-  }`;
+  }
+  a {
+    color: ${({ theme }) => theme.text};
+    text-decoration: underline;
+  }
+  `;
 
 export default GlobalStyles;

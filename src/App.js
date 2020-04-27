@@ -10,6 +10,9 @@ import ThemeToggle from './components/ThemeToggle/ThemeToggle';
 import Emoji from './components/Emoji/Emoji';
 import Image from './components/Image/Image';
 import profilePic from './images/profilePic.png';
+import Footer from './components/Footer/Footer';
+import IconButton from './components/IconButton/IconButton';
+import sendEmail from './functions/sendEmail';
 
 const App = () => {
   const [theme, toggleTheme] = useDarkMode();
@@ -21,6 +24,11 @@ const App = () => {
     } else {
       toggleTheme('light');
     }
+  };
+
+  const handleContact = () => {
+    console.log(sendEmail());
+    window.location.href = sendEmail();
   };
 
   const isDarkMode = theme === 'dark';
@@ -35,7 +43,7 @@ const App = () => {
         </Hero>
         <MainContent>
           <p>
-            I’m Dave, A quaint yorkshireman living in Manchester. An experienced{' '}
+            I’m Dave, A quaint Yorkshireman living in Manchester. An experienced{' '}
             <strong>Front End Developer</strong>, I’m passionate about
             Javascript, Unit testing, UX and Accessability.
           </p>
@@ -45,16 +53,36 @@ const App = () => {
           </p>
           <br />
           <p>Always happy for a chat! Why not drop me a line?</p>
-          <Button>
+          <Button onClick={handleContact}>
             <Emoji label="Email icon" symbol="📬" /> Get In Touch
           </Button>
           <p>You can also find me here!</p>
+          <IconButton href="https://twitter.com/daaveuk/" icon="twitter" />
+          <IconButton
+            href="https://www.linkedin.com/in/daaveuk/"
+            icon="linkedin"
+          />
+          <IconButton href="https://github.com/daaveuk/" icon="github" />
         </MainContent>
-        <ThemeToggle
-          id="themeToggle"
-          handleToggle={handleToggle}
-          value={isDarkMode}
-        />
+        <Footer>
+          <ThemeToggle
+            id="themeToggle"
+            handleToggle={handleToggle}
+            value={isDarkMode}
+          />
+          <span>
+            Made with <Emoji label="Love" symbol="❤️" /> by David Henderson.
+          </span>
+          <span>
+            <a
+              href="https://github.com/daaveuk/webpage"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              View the code here.
+            </a>
+          </span>
+        </Footer>
       </>
     </ThemeProvider>
   );

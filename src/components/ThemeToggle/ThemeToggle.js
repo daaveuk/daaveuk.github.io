@@ -26,7 +26,6 @@ const ThemeToggleWrapper = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 0 1rem;
 `;
 
 const ToggleLabel = styled.p`

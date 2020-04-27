@@ -13,14 +13,15 @@ const StyledButton = styled.button`
   min-width: 10rem;
   font-weight: 700;
   cursor: pointer;
+  ${({ theme }) => theme.hover}
 `;
 
-const Button = ({ handleClick, children }) => (
-  <StyledButton onClick={handleClick}>{children}</StyledButton>
+const Button = ({ onClick, children }) => (
+  <StyledButton onClick={onClick}>{children}</StyledButton>
 );
 
 Button.propTypes = {
-  handleClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired,
   children: PropTypes.element.isRequired,
 };
 
