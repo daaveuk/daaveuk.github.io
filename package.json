@@ -1,7 +1,7 @@
 {
-  "name": "@daaveuk/webpage",
+  "name": "@daaveuk/daaveuk.github.io",
   "version": "0.1.0",
-  "homepage": "https://daaveuk.github.io/webpage",
+  "homepage": "https://daaveuk.github.io",
   "private": true,
   "dependencies": {
     "@babel/core": "7.9.0",
