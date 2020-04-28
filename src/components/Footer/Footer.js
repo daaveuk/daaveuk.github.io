@@ -8,7 +8,7 @@ Footer.propTypes = {
   children: PropTypes.element.isRequired,
 };
 
-const StyledFooter = styled.div`
+const StyledFooter = styled.footer`
   position: fixed;
   bottom: 0;
   display: flex;
@@ -18,6 +18,9 @@ const StyledFooter = styled.div`
   width: 100%;
   padding: 0.5rem 1rem;
   background-color: ${({ theme }) => theme.backgroundAccent};
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
 `;
 
 export default Footer;

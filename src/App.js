@@ -8,11 +8,11 @@ import MainContent from './components/MainContent/MainContent';
 import { useDarkMode } from './hooks/useDarkMode';
 import ThemeToggle from './components/ThemeToggle/ThemeToggle';
 import Emoji from './components/Emoji/Emoji';
-import Image from './components/Image/Image';
 import profilePic from './images/profilePic.png';
 import Footer from './components/Footer/Footer';
 import IconButton from './components/IconButton/IconButton';
 import sendEmail from './functions/sendEmail';
+import ProfilePicture from './components/ProfilePicture/ProfilePicture';
 
 const App = () => {
   const [theme, toggleTheme] = useDarkMode();
@@ -38,31 +38,33 @@ const App = () => {
       <>
         <GlobalStyles />
         <Hero>
-          <Image src={profilePic} />
+          <ProfilePicture src={profilePic} />
           <Title>Ey 'up!</Title>
         </Hero>
         <MainContent>
-          <p>
-            I’m Dave, A quaint Yorkshireman living in Manchester. An experienced{' '}
-            <strong>Front End Developer</strong>, I’m passionate about
-            Javascript, Unit testing, UX and Accessability.
-          </p>
-          <p>
-            I’m currently part of a great team building great products at{' '}
-            <strong>Kaboodle</strong>.
-          </p>
-          <br />
-          <p>Always happy for a chat! Why not drop me a line?</p>
-          <Button onClick={handleContact}>
-            <Emoji label="Email icon" symbol="📬" /> Get In Touch
-          </Button>
-          <p>You can also find me here!</p>
-          <IconButton href="https://twitter.com/daaveuk/" icon="twitter" />
-          <IconButton
-            href="https://www.linkedin.com/in/daaveuk/"
-            icon="linkedin"
-          />
-          <IconButton href="https://github.com/daaveuk/" icon="github" />
+          <div>
+            <p>
+              I’m Dave, A quaint Yorkshireman living in Manchester. An
+              experienced <strong>Front End Developer</strong>, I’m passionate
+              about Javascript, Unit testing, UX and Accessability.
+            </p>
+            <p>
+              I’m currently part of a great team building great products at{' '}
+              <strong>Kaboodle</strong>.
+            </p>
+            <br />
+            <p>Always happy for a chat! Why not drop me a line?</p>
+            <Button onClick={handleContact}>
+              <Emoji label="Email icon" symbol="📬" /> Get In Touch
+            </Button>
+            <p>You can also find me here!</p>
+            <IconButton href="https://twitter.com/daaveuk/" icon="twitter" />
+            <IconButton
+              href="https://www.linkedin.com/in/daaveuk/"
+              icon="linkedin"
+            />
+            <IconButton href="https://github.com/daaveuk/" icon="github" />
+          </div>
         </MainContent>
         <Footer>
           <ThemeToggle

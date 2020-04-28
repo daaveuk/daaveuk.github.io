@@ -9,7 +9,7 @@ const GlobalStyles = createGlobalStyle`
     -moz-osx-font-smoothing: grayscale;
   }
 
-  body {
+  body, html {
     align-items: center;
     background: ${({ theme }) => theme.body};
     color: ${({ theme }) => theme.text};
@@ -17,11 +17,18 @@ const GlobalStyles = createGlobalStyle`
     font-size: 16px;
     font-family: 'Lato', sans-serif;
     padding: 0;
+    @media (min-width: 768px) {
+      font-size: 18px;
+    }
+    @media (min-width: 1281px) {
+      font-size: 20px;
+    }
   }
   a {
     color: ${({ theme }) => theme.text};
     text-decoration: underline;
   }
+  
   `;
 
 export default GlobalStyles;

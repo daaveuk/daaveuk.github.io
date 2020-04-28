@@ -18,8 +18,9 @@ Image.defaultProps = {
 };
 
 const StyledImage = styled.img`
-  width: ${({ width }) => width};
-  height: ${({ height }) => height};
+  min-width: ${({ width }) => width};
+  min-height: ${({ height }) => height};
+  display: block;
 `;
 
 export default Image;

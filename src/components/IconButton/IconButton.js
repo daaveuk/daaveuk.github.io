@@ -22,6 +22,7 @@ const StyledIcon = styled.a`
   display: inline-block;
   background-color: red;
   color: white;
+  border: 1px solid black;
   ${({ theme }) => theme.hover}
   & + & {
     margin-left: 0.5rem;
@@ -30,17 +31,20 @@ const StyledIcon = styled.a`
     props.icon === 'github' &&
     css`
       background: white;
+      border-color: #ddd;
       color: black;
     `}
   ${props =>
     props.icon === 'twitter' &&
     css`
       background: #1da1f2;
+      border-color: #1da1f2;
     `}
     ${props =>
       props.icon === 'linkedin' &&
       css`
         background: #007bb5;
+        border-color: #007bb5;
       `}
 `;
 
