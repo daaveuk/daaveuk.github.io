@@ -13,6 +13,7 @@ const StyledButton = styled.button`
   min-width: 10rem;
   font-weight: 700;
   cursor: pointer;
+  font-size: 1rem;
   ${({ theme }) => theme.hover}
 `;
 
