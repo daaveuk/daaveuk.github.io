@@ -1,0 +1,9 @@
+pull_request_rules:
+  - name: merge pull requests from dependabot if CI passes
+    conditions:
+      - author=dependabot-preview[bot]
+      - status-success="cypress-run"
+      - status-success="eslint"
+    actions:
+      merge:
+        method: merge
