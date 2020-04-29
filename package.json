@@ -68,7 +68,9 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "lint": "eslint ./src",
-    "lint:fix": "eslint ./src --fix"
+    "lint:fix": "eslint ./src --fix",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "eslintConfig": {
     "extends": "wesbos"
@@ -86,11 +88,14 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/cypress": "^6.0.0",
     "babel-eslint": "^9.0.0",
+    "cypress": "^4.5.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.1",
     "eslint-config-prettier": "^4.3.0",
     "eslint-config-wesbos": "0.0.19",
+    "eslint-plugin-cypress": "^2.10.3",
     "eslint-plugin-html": "^5.0.5",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",

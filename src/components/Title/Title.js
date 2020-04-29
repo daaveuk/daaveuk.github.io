@@ -2,10 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const Title = ({ children }) => <StyledTitle>{children}</StyledTitle>;
+const Title = ({ children, testId }) => (
+  <StyledTitle data-testid={testId}>{children}</StyledTitle>
+);
 
 Title.propTypes = {
   children: PropTypes.element.isRequired,
+  testId: PropTypes.string.isRequired,
 };
 
 export default Title;
