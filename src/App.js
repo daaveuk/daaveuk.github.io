@@ -39,7 +39,7 @@ const App = () => {
         <GlobalStyles />
         <Hero>
           <ProfilePicture src={profilePic} />
-          <Title>Ey 'up!</Title>
+          <Title testId="title">Ey 'up!</Title>
         </Hero>
         <MainContent>
           <div>
