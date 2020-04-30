@@ -17,6 +17,7 @@ IconButton.propTypes = {
 const StyledIcon = styled.a`
   line-height: 3rem;
   width: 3rem;
+  height: 3rem;
   text-align: center;
   border-radius: 50%;
   display: inline-block;
