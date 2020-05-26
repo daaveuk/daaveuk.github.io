@@ -46,7 +46,7 @@ const App = () => {
             <p>
               I’m Dave, A quaint Yorkshireman living in Manchester. An
               experienced <strong>Front End Developer</strong>, I’m passionate
-              about Javascript, Unit testing, UX and Accessability.
+              about Javascript, Unit testing, UX and Accessibility.
             </p>
             <p>
               I’m currently part of a great team building great products at{' '}
