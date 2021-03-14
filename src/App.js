@@ -26,11 +26,6 @@ const App = () => {
     }
   };
 
-  const handleContact = () => {
-    console.log(sendEmail());
-    window.location.href = sendEmail();
-  };
-
   const isDarkMode = theme === 'dark';
 
   return (
@@ -50,11 +45,11 @@ const App = () => {
             </p>
             <p>
               I’m currently part of a great team building great products at{' '}
-              <strong>Kaboodle</strong>.
+              <strong>Interactive Investor</strong>.
             </p>
             <br />
             <p>Always happy for a chat! Why not drop me a line?</p>
-            <Button onClick={handleContact}>
+            <Button href={sendEmail()}>
               <Emoji label="Email icon" symbol="📬" /> Get In Touch
             </Button>
             <p>You can also find me here!</p>
