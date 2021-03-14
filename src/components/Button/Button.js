@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-const StyledButton = styled.button`
+const StyledButton = styled.a`
   background-color: black;
   background: ${({ theme }) => theme.buttonGradient};
   color: white;
@@ -10,19 +10,21 @@ const StyledButton = styled.button`
   appearance: none;
   border: none;
   line-height: 3rem;
-  min-width: 10rem;
   font-weight: 700;
   cursor: pointer;
   font-size: 1rem;
+  display: inline-block;
+  padding: 0 1rem;
+  text-decoration: none;
   ${({ theme }) => theme.hover}
 `;
 
-const Button = ({ onClick, children }) => (
-  <StyledButton onClick={onClick}>{children}</StyledButton>
+const Button = ({ href, children }) => (
+  <StyledButton href={href}>{children}</StyledButton>
 );
 
 Button.propTypes = {
-  onClick: PropTypes.func.isRequired,
+  href: PropTypes.string.isRequired,
   children: PropTypes.element.isRequired,
 };
 
