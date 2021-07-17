@@ -11,7 +11,7 @@
     "@fortawesome/react-fontawesome": "^0.1.12",
     "@svgr/webpack": "5.5.0",
     "@testing-library/jest-dom": "^5.11.6",
-    "@testing-library/user-event": "^12.2.2",
+    "@testing-library/user-event": "^13.2.0",
     "@testing-library/react": "^11.1.2",
     "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/parser": "^2.34.0",
