@@ -17,6 +17,7 @@ export default defineConfig({
     coverage: {
       reporter: ["text", "json", "html"],
       exclude: ["node_modules/", "src/test/"],
+      reportsDirectory: "coverage/unit",
     },
   },
   resolve: {
