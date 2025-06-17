@@ -23,9 +23,16 @@
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --ignore-pattern \"**/*.astro\"",
     "lint:fix": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --ignore-pattern \"**/*.astro\" --fix",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:run": "cypress run",
+    "cypress:run:chrome": "cypress run --browser chrome",
+    "cypress:run:firefox": "cypress run --browser firefox",
+    "cypress:run:headed": "cypress run --headed",
+    "cypress:run:spec": "cypress run --spec",
+    "test:e2e": "start-server-and-test dev http://localhost:4321 cypress:run",
+    "test:all": "npm run test:run && npm run test:e2e"
   },
   "devDependencies": {
+    "@testing-library/cypress": "^10.0.3",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.1.2",
     "@types/jest": "^29.5.0",
@@ -35,9 +42,10 @@
     "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/parser": "^2.34.0",
     "@vitest/coverage-v8": "^3.2.3",
-    "cypress": "^4.12.1",
+    "cypress": "^14.4.1",
     "eslint": "^5.16.0",
     "jsdom": "^25.0.1",
+    "start-server-and-test": "^2.0.12",
     "typescript": "^5.8.3",
     "vitest": "^3.2.3"
   }

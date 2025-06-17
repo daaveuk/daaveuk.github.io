@@ -6,9 +6,7 @@ export interface Props {
 const { testId }: Props = Astro.props;
 ---
 
-<h1 data-testid={testId}>
-  <slot />
-</h1>
+<h1 data-testid={testId}><slot /></h1>
 
 <style>
   h1 {
