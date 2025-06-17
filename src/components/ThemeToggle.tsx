@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 interface ThemeToggleProps {
   id?: string;
@@ -21,18 +21,21 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ id }) => {
 
   useEffect(() => {
     // Get initial theme
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    setIsDarkMode(currentTheme === 'dark');
+    const currentTheme = document.documentElement.getAttribute("data-theme");
+    setIsDarkMode(currentTheme === "dark");
 
     // Listen for theme changes
     const handleThemeChange = (event: ThemeChangeEvent) => {
-      setIsDarkMode(event.detail.theme === 'dark');
+      setIsDarkMode(event.detail.theme === "dark");
     };
 
-    window.addEventListener('themeChange', handleThemeChange as EventListener);
+    window.addEventListener("themeChange", handleThemeChange as EventListener);
 
     return () => {
-      window.removeEventListener('themeChange', handleThemeChange as EventListener);
+      window.removeEventListener(
+        "themeChange",
+        handleThemeChange as EventListener
+      );
     };
   }, []);
 
@@ -43,7 +46,11 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ id }) => {
   };
 
   return (
-    <div className="theme-toggle-wrapper" role="group" aria-labelledby="theme-toggle-label">
+    <div
+      className="theme-toggle-wrapper"
+      role="group"
+      aria-labelledby="theme-toggle-label"
+    >
       <span id="theme-toggle-label" className="sr-only">
         Theme selector
       </span>
@@ -51,7 +58,7 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ id }) => {
         id={id}
         className="theme-toggle"
         onClick={handleToggle}
-        aria-label={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
+        aria-label={`Switch to ${isDarkMode ? "light" : "dark"} mode`}
         aria-pressed={isDarkMode}
         type="button"
       >
@@ -59,8 +66,12 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ id }) => {
           <span className="theme-toggle-thumb"></span>
         </span>
         <span className="theme-toggle-icons">
-          <span className="sun-icon" aria-hidden="true">☀️</span>
-          <span className="moon-icon" aria-hidden="true">🌙</span>
+          <span className="sun-icon" aria-hidden="true">
+            ☀️
+          </span>
+          <span className="moon-icon" aria-hidden="true">
+            🌙
+          </span>
         </span>
       </button>
     </div>
