@@ -1,4 +1,6 @@
 ---
+import LavaLamp from '../components/LavaLamp.astro';
+
 export interface Props {
   title: string;
 }
@@ -18,6 +20,7 @@ const { title }: Props = Astro.props;
     <title>{title}</title>
   </head>
   <body>
+    <LavaLamp />
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <slot />
     <script is:inline>
@@ -53,17 +56,18 @@ const { title }: Props = Astro.props;
 
 <style is:global>
   :root {
-    /* Light theme colors - WCAG AA compliant */
-    --color-body: #FFFFFF;
-    --color-background-accent: #E5E7EB;
-    --color-text: #374151;           /* Improved contrast ratio */
-    --color-text-muted: #6B7280;     /* For secondary text */
-    --color-header-gradient: linear-gradient(142.5deg, #E5E7EB -0.86%, #FFFFFF 86.05%);
-    --color-button-gradient: linear-gradient(270deg, #DC2626 0%, #B91C1C 100%); /* Better contrast */
-    --color-hover-shadow: #9CA3AF;
-    --color-focus-ring: #3B82F6;     /* Blue focus indicator */
-    --color-link: #1D4ED8;           /* High contrast link color */
-    --color-link-hover: #1E40AF;
+    /* Light theme colors - Modern clean design */
+    --color-body: #FAFAFA;
+    --color-background-accent: #F5F5F5;
+    --color-header-bg: #FFFFFF;     /* Clean white header instead of gradient */
+    --color-text: #1A1A1A;          /* Deep black for better contrast */
+    --color-text-muted: #666666;    /* Softer gray for secondary text */
+    --color-button-bg: #2563EB;     /* Modern blue instead of gradient */
+    --color-button-hover: #1D4ED8;  /* Darker blue on hover */
+    --color-hover-shadow: rgba(37, 99, 235, 0.15);
+    --color-focus-ring: #3B82F6;    /* Blue focus indicator */
+    --color-link: #2563EB;          /* Consistent with button color */
+    --color-link-hover: #1D4ED8;
 
     /* Typography */
     --font-family: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -131,17 +135,18 @@ const { title }: Props = Astro.props;
   }
 
   [data-theme="dark"] {
-    /* Dark theme colors - WCAG AA compliant */
-    --color-body: #111827;
-    --color-background-accent: #1F2937;
-    --color-text: #F9FAFB;            /* High contrast white text */
-    --color-text-muted: #D1D5DB;      /* For secondary text */
-    --color-header-gradient: linear-gradient(113.53deg, #1F2937 0%, rgba(31, 41, 55, 0) 86.04%);
-    --color-button-gradient: linear-gradient(270deg, #EF4444 0%, #DC2626 100%); /* Better contrast */
-    --color-hover-shadow: rgba(0, 0, 0, 0.8);
-    --color-focus-ring: #60A5FA;      /* Light blue focus indicator */
-    --color-link: #60A5FA;            /* High contrast link color */
-    --color-link-hover: #3B82F6;
+    /* Dark theme colors - Modern clean design */
+    --color-body: #0A0A0A;
+    --color-background-accent: #1A1A1A;
+    --color-header-bg: #111111;      /* Dark header instead of gradient */
+    --color-text: #FFFFFF;           /* Pure white text */
+    --color-text-muted: #A0A0A0;     /* Light gray for secondary text */
+    --color-button-bg: #3B82F6;      /* Brighter blue for dark mode */
+    --color-button-hover: #60A5FA;   /* Even brighter on hover */
+    --color-hover-shadow: rgba(59, 130, 246, 0.2);
+    --color-focus-ring: #60A5FA;     /* Light blue focus indicator */
+    --color-link: #60A5FA;           /* Consistent with button color */
+    --color-link-hover: #93C5FD;
   }
 
   *,
@@ -166,6 +171,8 @@ const { title }: Props = Astro.props;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    position: relative;
+    overflow-x: hidden;
   }
 
   @media (min-width: 768px) {
@@ -238,8 +245,8 @@ const { title }: Props = Astro.props;
 
   .hover-effect:hover,
   .hover-effect:focus {
-    top: -2px;
-    box-shadow: 0 var(--space-base) var(--space-base) calc(-1 * var(--space-sm)) var(--color-hover-shadow);
+    top: -1px;
+    box-shadow: 0 4px 12px var(--color-hover-shadow);
   }
 
   /* Reduce motion for users who prefer it */
@@ -291,9 +298,10 @@ const { title }: Props = Astro.props;
     width: 47px;
     height: 30px;
     border-radius: 15px;
-    border: var(--border-width-thick) solid #e67272;
-    background-color: white;
+    border: var(--border-width-medium) solid var(--color-background-accent);
+    background-color: var(--color-header-bg);
     cursor: pointer;
+    transition: all 0.2s ease;
   }
 
   .toggle-label-switch::after {
@@ -303,7 +311,7 @@ const { title }: Props = Astro.props;
     width: 20px;
     height: 20px;
     margin: 2px;
-    background: var(--color-button-gradient);
+    background: var(--color-button-bg);
     transition: 0.2s;
   }
 
@@ -331,7 +339,7 @@ const { title }: Props = Astro.props;
     border-radius: var(--radius-full);
     width: 20px;
     height: 20px;
-    background-color: #e67272;
+    background-color: var(--color-button-bg);
     margin-left: 19px;
     transition: 0.2s;
   }

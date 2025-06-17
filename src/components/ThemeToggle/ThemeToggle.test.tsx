@@ -22,20 +22,19 @@ describe("ThemeToggle", () => {
     vi.clearAllMocks();
   });
 
-  it("renders theme toggle button", () => {
+  it("renders theme toggle checkbox", () => {
     render(<ThemeToggle />);
 
-    const button = screen.getByRole("button");
-    expect(button).toBeInTheDocument();
-    expect(button).toHaveAttribute("type", "button");
+    const checkbox = screen.getByRole("checkbox");
+    expect(checkbox).toBeInTheDocument();
+    expect(checkbox).toHaveAttribute("type", "checkbox");
   });
 
   it("renders with correct accessibility attributes", () => {
     render(<ThemeToggle />);
 
-    const button = screen.getByRole("button");
-    expect(button).toHaveAttribute("aria-label");
-    expect(button).toHaveAttribute("aria-pressed");
+    const checkbox = screen.getByRole("checkbox");
+    expect(checkbox).toHaveAttribute("aria-label");
 
     const group = screen.getByRole("group");
     expect(group).toHaveAttribute("aria-labelledby", "theme-toggle-label");
@@ -44,56 +43,55 @@ describe("ThemeToggle", () => {
   it("accepts custom id prop", () => {
     render(<ThemeToggle id="custom-toggle" />);
 
-    const button = screen.getByRole("button");
-    expect(button).toHaveAttribute("id", "custom-toggle");
+    const toggle = screen.getByLabelText("Toggle switch").closest("label");
+    expect(toggle).toHaveAttribute("id", "custom-toggle");
   });
 
-  it("displays correct aria-label for light mode", () => {
+  it("displays correct state for light mode", () => {
     document.documentElement.setAttribute("data-theme", "light");
     render(<ThemeToggle />);
 
-    const button = screen.getByRole("button");
-    expect(button).toHaveAttribute("aria-label", "Switch to dark mode");
-    expect(button).toHaveAttribute("aria-pressed", "false");
+    const checkbox = screen.getByRole("checkbox");
+    expect(checkbox).not.toBeChecked();
   });
 
-  it("displays correct aria-label for dark mode", async () => {
+  it("displays correct state for dark mode", async () => {
     document.documentElement.setAttribute("data-theme", "dark");
     render(<ThemeToggle />);
 
     // Wait for useEffect to process the theme change
     await waitFor(() => {
-      const button = screen.getByRole("button");
-      expect(button).toHaveAttribute("aria-label", "Switch to light mode");
-      expect(button).toHaveAttribute("aria-pressed", "true");
+      const checkbox = screen.getByRole("checkbox");
+      expect(checkbox).toBeChecked();
     });
   });
 
   it("calls window.toggleTheme when clicked", () => {
     render(<ThemeToggle />);
 
-    const button = screen.getByRole("button");
-    fireEvent.click(button);
+    const checkbox = screen.getByRole("checkbox");
+    fireEvent.click(checkbox);
 
     expect(mockToggleTheme).toHaveBeenCalledTimes(1);
   });
+
   it("handles missing window.toggleTheme gracefully", () => {
     // Remove the toggleTheme function
     (window as any).toggleTheme = undefined;
     render(<ThemeToggle />);
 
-    const button = screen.getByRole("button");
+    const checkbox = screen.getByRole("checkbox");
 
     // Should not throw error when clicked
-    expect(() => fireEvent.click(button)).not.toThrow();
+    expect(() => fireEvent.click(checkbox)).not.toThrow();
   });
 
   it("responds to theme change events", async () => {
     render(<ThemeToggle />);
 
     // Initially light mode
-    const button = screen.getByRole("button");
-    expect(button).toHaveAttribute("aria-pressed", "false");
+    const checkbox = screen.getByRole("checkbox");
+    expect(checkbox).not.toBeChecked();
 
     // Simulate theme change event
     const themeChangeEvent = new CustomEvent("themeChange", {
@@ -103,8 +101,7 @@ describe("ThemeToggle", () => {
     window.dispatchEvent(themeChangeEvent);
 
     await waitFor(() => {
-      expect(button).toHaveAttribute("aria-pressed", "true");
-      expect(button).toHaveAttribute("aria-label", "Switch to light mode");
+      expect(checkbox).toBeChecked();
     });
   });
 
@@ -123,10 +120,11 @@ describe("ThemeToggle", () => {
   it("has proper CSS classes for styling", () => {
     render(<ThemeToggle />);
 
-    expect(screen.getByRole("group")).toHaveClass("theme-toggle-wrapper");
-    expect(screen.getByRole("button")).toHaveClass("theme-toggle");
-    expect(document.querySelector(".theme-toggle-track")).toBeInTheDocument();
-    expect(document.querySelector(".theme-toggle-thumb")).toBeInTheDocument();
-    expect(document.querySelector(".theme-toggle-icons")).toBeInTheDocument();
+    // Check that elements have Vanilla Extract generated classes (just check they exist)
+    const group = screen.getByRole("group");
+    expect(group.className).toBeTruthy(); // Should have some class
+
+    const toggle = screen.getByLabelText("Toggle switch").closest("label");
+    expect(toggle?.className).toBeTruthy(); // Should have some class
   });
 });

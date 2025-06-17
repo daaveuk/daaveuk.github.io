@@ -1,0 +1,21 @@
+---
+// Container component - static content
+---
+<div class="container">
+  <slot />
+</div>
+
+<style>
+  .container {
+    transform: translateY(var(--space-xl));
+    padding: 0 var(--container-padding-mobile);
+  }
+
+  @media (min-width: 768px) {
+    .container {
+      margin: 0 auto;
+      max-width: var(--container-max-width);
+      padding: 0 var(--container-padding-desktop);
+    }
+  }
+</style>

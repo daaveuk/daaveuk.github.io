@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Toggle Component Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        line-height: 1.6;
+      }
+
+      .test-section {
+        margin: 30px 0;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+
+      .test-section h3 {
+        margin-top: 0;
+        color: #333;
+      }
+
+      .status {
+        margin: 10px 0;
+        font-weight: bold;
+      }
+
+      /* Toggle styles - replicated from vanilla-extract output */
+      .switch-container {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+      }
+
+      .input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.4s;
+      }
+
+      .slider.checked {
+        background-color: #2196f3;
+      }
+
+      .slider.disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .slider.round {
+        border-radius: 34px;
+      }
+
+      .slider-thumb {
+        position: absolute;
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: 0.4s;
+      }
+
+      .slider-thumb.checked {
+        transform: translateX(26px);
+      }
+
+      .slider-thumb.round {
+        border-radius: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Toggle Component Test</h1>
+    <p>This page tests the toggle component fixes:</p>
+    <ol>
+      <li>
+        <strong>Rounded mode</strong>: The inner circle should be round when
+        rounded prop is true
+      </li>
+      <li>
+        <strong>State updates</strong>: The toggle should visually change when
+        clicked
+      </li>
+    </ol>
+
+    <div class="test-section">
+      <h3>1. Basic Toggle</h3>
+      <label class="switch-container">
+        <input
+          type="checkbox"
+          class="input"
+          onchange="updateToggle(this, 'basic')"
+        />
+        <span class="slider">
+          <span class="slider-thumb"></span>
+        </span>
+      </label>
+      <div class="status" id="basic-status">Status: Off</div>
+    </div>
+
+    <div class="test-section">
+      <h3>2. Rounded Toggle</h3>
+      <label class="switch-container">
+        <input
+          type="checkbox"
+          class="input"
+          onchange="updateToggle(this, 'rounded')"
+        />
+        <span class="slider round">
+          <span class="slider-thumb round"></span>
+        </span>
+      </label>
+      <div class="status" id="rounded-status">Status: Off</div>
+    </div>
+
+    <div class="test-section">
+      <h3>3. Pre-checked Toggle</h3>
+      <label class="switch-container">
+        <input
+          type="checkbox"
+          class="input"
+          checked
+          onchange="updateToggle(this, 'prechecked')"
+        />
+        <span class="slider checked">
+          <span class="slider-thumb checked"></span>
+        </span>
+      </label>
+      <div class="status" id="prechecked-status">Status: On</div>
+    </div>
+
+    <div class="test-section">
+      <h3>4. Pre-checked Rounded Toggle</h3>
+      <label class="switch-container">
+        <input
+          type="checkbox"
+          class="input"
+          checked
+          onchange="updateToggle(this, 'precheck-round')"
+        />
+        <span class="slider round checked">
+          <span class="slider-thumb round checked"></span>
+        </span>
+      </label>
+      <div class="status" id="precheck-round-status">Status: On</div>
+    </div>
+
+    <div class="test-section">
+      <h3>5. Disabled Toggle</h3>
+      <label class="switch-container">
+        <input type="checkbox" class="input" checked disabled />
+        <span class="slider disabled checked">
+          <span class="slider-thumb checked"></span>
+        </span>
+      </label>
+      <div class="status">Status: On (Disabled)</div>
+    </div>
+
+    <script>
+      function updateToggle(input, id) {
+        const slider = input.nextElementSibling;
+        const thumb = slider.querySelector(".slider-thumb");
+        const status = document.getElementById(id + "-status");
+
+        if (input.checked) {
+          slider.classList.add("checked");
+          thumb.classList.add("checked");
+          status.textContent = "Status: On";
+        } else {
+          slider.classList.remove("checked");
+          thumb.classList.remove("checked");
+          status.textContent = "Status: Off";
+        }
+      }
+    </script>
+
+    <div
+      style="
+        margin-top: 40px;
+        padding: 20px;
+        background-color: #f5f5f5;
+        border-radius: 8px;
+      "
+    >
+      <h3>Expected Behavior:</h3>
+      <ul>
+        <li>
+          ✅ <strong>Basic Toggle</strong>: Square slider thumb, moves when
+          clicked
+        </li>
+        <li>
+          ✅ <strong>Rounded Toggle</strong>: Round slider container and thumb,
+          moves when clicked
+        </li>
+        <li>
+          ✅ <strong>Pre-checked Toggles</strong>: Start in "on" position with
+          blue background
+        </li>
+        <li>✅ <strong>Disabled Toggle</strong>: Grayed out, not clickable</li>
+        <li>
+          ✅ <strong>All Toggles</strong>: Smooth transitions, proper color
+          changes
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>

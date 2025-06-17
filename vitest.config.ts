@@ -1,7 +1,13 @@
 /// <reference types="vitest" />
 import { defineConfig } from "vitest/config";
+import { vanillaExtractPlugin } from "@vanilla-extract/vite-plugin";
 
 export default defineConfig({
+  plugins: [
+    vanillaExtractPlugin({
+      identifiers: "short",
+    }),
+  ],
   test: {
     environment: "jsdom",
     setupFiles: ["./src/test/setup.ts"],
@@ -11,6 +17,7 @@ export default defineConfig({
     coverage: {
       reporter: ["text", "json", "html"],
       exclude: ["node_modules/", "src/test/"],
+      reportsDirectory: "coverage/unit",
     },
   },
   resolve: {

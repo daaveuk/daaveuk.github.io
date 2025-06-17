@@ -21,15 +21,48 @@
     main {
       padding: 0 var(--container-padding-desktop) var(--space-xl);
     }
+
+    main::before {
+      left: var(--container-padding-desktop);
+      right: var(--container-padding-desktop);
+    }
   }
 
   /* Section spacing and structure */
   section {
     margin-bottom: var(--space-xl);
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    border: 1px solid var(--color-background-accent);
+    backdrop-filter: blur(10px);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  /* Dark theme section background */
+  [data-theme="dark"] section {
+    background: rgba(17, 17, 17, 0.8);
+  }
+
+  section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px var(--color-hover-shadow);
   }
 
   section:last-child {
     margin-bottom: 0;
+  }
+
+  /* Respect user motion preferences for sections */
+  @media (prefers-reduced-motion: reduce) {
+    section {
+      transition: none;
+    }
+
+    section:hover {
+      transform: none;
+      box-shadow: 0 0 0 2px var(--color-focus-ring);
+    }
   }
 
   /* Social media links container */
