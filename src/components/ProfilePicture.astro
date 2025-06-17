@@ -18,10 +18,29 @@ const { src, alt = "Dave Henderson Profile Picture" }: Props = Astro.props;
   }
 
   .profile-picture img {
-    border-radius: var(--radius-full);
+    border-radius: var(--radius-xl);
     width: var(--profile-picture-size);
     height: var(--profile-picture-size);
     object-fit: cover;
+    border: 3px solid var(--color-background-accent);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .profile-picture img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 30px var(--color-hover-shadow);
+  }
+
+  /* Respect user motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .profile-picture img {
+      transition: none;
+    }
+    
+    .profile-picture img:hover {
+      transform: none;
+      box-shadow: 0 0 0 3px var(--color-focus-ring);
+    }
   }
 
   @media (min-width: 768px) {

@@ -1,12 +1,14 @@
 ---
+import Container from "./Container.astro";
+
 // Hero component - static content
 ---
 
 <header>
   <div class="header-background">
-    <div class="container">
+    <Container>
       <slot />
-    </div>
+    </Container>
   </div>
 </header>
 
@@ -32,7 +34,6 @@
   .header-background {
     min-height: 6rem;
     margin-bottom: var(--space-2xl);
-    background: var(--color-header-gradient);
   }
 
   @media (min-width: 768px) {

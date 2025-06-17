@@ -1,0 +1,481 @@
+---
+// LavaLamp component - static content
+---
+
+<canvas class="background-canvas"></canvas>
+
+<style>
+  .background-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+</style>
+
+<script>
+interface Circle {
+  x: number;
+  y: number;
+  radius: number;
+  color: [number, number, number];
+  vx: number;
+  vy: number;
+  interactive: boolean;
+}
+
+interface Mouse {
+  x: number;
+  y: number;
+}
+
+window.addEventListener('load', () => {
+  const canvas = document.querySelector('.background-canvas') as HTMLCanvasElement;
+  if (!canvas) {
+    console.error("Canvas element not found");
+    return;
+  }
+
+  // Disable during tests to prevent graphics issues
+  if (window.location.hostname === 'localhost' && window.navigator.webdriver) {
+    canvas.style.background = 'radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.03) 0%, transparent 50%)';
+    return;
+  }
+
+  const gl = canvas.getContext("webgl")!;
+  if (!gl) {
+    console.error("WebGL not supported");
+    return;
+  }
+
+  // Respect user motion preferences
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) {
+    // Fallback to simple static background
+    canvas.style.background = 'radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.03) 0%, transparent 50%)';
+    return;
+  }
+
+  // Debug mode - check environment variable
+  const DEBUG_CIRCLES = import.meta.env.PUBLIC_DEBUG_CIRCLES === 'true';
+
+  let width = canvas.width = window.innerWidth;
+  let height = canvas.height = window.innerHeight;
+
+  // Create debug overlay canvas if in debug mode
+  let debugCanvas: HTMLCanvasElement | null = null;
+  let debugCtx: CanvasRenderingContext2D | null = null;
+
+  if (DEBUG_CIRCLES) {
+    debugCanvas = document.createElement('canvas');
+    debugCanvas.style.position = 'fixed';
+    debugCanvas.style.top = '0';
+    debugCanvas.style.left = '0';
+    debugCanvas.style.width = '100%';
+    debugCanvas.style.height = '100%';
+    debugCanvas.style.zIndex = '1000';
+    debugCanvas.style.pointerEvents = 'none';
+    debugCanvas.width = width;
+    debugCanvas.height = height;
+    document.body.appendChild(debugCanvas);
+    debugCtx = debugCanvas.getContext('2d');
+  }
+
+  function resizeCanvas() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+    gl.viewport(0, 0, width, height);
+
+    // Resize debug canvas too
+    if (debugCanvas) {
+      debugCanvas.width = width;
+      debugCanvas.height = height;
+    }
+
+    // Reinitialize circles with new viewport-appropriate sizes
+    initCircles();
+  }
+  window.addEventListener("resize", resizeCanvas);
+
+  let mouse: Mouse = { x: width / 2, y: height / 2 };
+  let mouseInViewport = false;
+
+  function onMouseMove(e: MouseEvent) {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+    mouseInViewport = true;
+  }
+
+  function onMouseLeave() {
+    mouseInViewport = false;
+  }
+
+  window.addEventListener("mousemove", onMouseMove);
+  window.addEventListener("mouseleave", onMouseLeave);
+
+  // Check for dark mode and adjust colors accordingly
+  const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+
+  const circleColors: [number, number, number][] = isDarkMode ? [
+    // Dark mode colors - varied warm and cool tones
+    [59 / 255, 130 / 255, 246 / 255],   // Blue-500
+    [251 / 255, 146 / 255, 60 / 255],   // Orange-400
+    [239 / 255, 68 / 255, 68 / 255],    // Red-500
+    [168 / 255, 85 / 255, 247 / 255],   // Purple-500
+    [245 / 255, 101 / 255, 101 / 255],  // Red-400
+    [251 / 255, 191 / 255, 36 / 255],   // Amber-400
+  ] : [
+    // Light mode colors - subtle warm and cool tones
+    [37 / 255, 99 / 255, 235 / 255],    // Blue-600
+    [234 / 255, 88 / 255, 12 / 255],    // Orange-600
+    [220 / 255, 38 / 255, 127 / 255],   // Pink-600
+    [147 / 255, 51 / 255, 234 / 255],   // Purple-600
+    [185 / 255, 28 / 255, 28 / 255],    // Red-700
+    [217 / 255, 119 / 255, 6 / 255],    // Amber-600
+  ];
+
+  let circles: Circle[] = [];
+
+  // Helper function to find the position that maximizes distance from existing circles
+  function findFarthestPosition(radius: number, existingCircles: Circle[]): { x: number, y: number } {
+    // If no existing circles, place the first one in a good spot (not center)
+    if (existingCircles.length === 0) {
+      const margin = radius * 1.2;
+      // Place first circle in one of the corners for better distribution
+      const positions = [
+        { x: margin + width * 0.2, y: margin + height * 0.2 },
+        { x: width - margin - width * 0.2, y: margin + height * 0.2 },
+        { x: margin + width * 0.2, y: height - margin - height * 0.2 },
+        { x: width - margin - width * 0.2, y: height - margin - height * 0.2 }
+      ];
+      return positions[Math.floor(Math.random() * positions.length)];
+    }
+
+    let bestPosition = { x: width / 2, y: height / 2 };
+    let maxMinDistance = 0;
+
+    // Create a grid of candidate positions across the entire viewport
+    const gridResolution = 20; // Higher resolution for better placement
+    const stepX = width / gridResolution;
+    const stepY = height / gridResolution;
+
+    for (let gridX = 0; gridX <= gridResolution; gridX++) {
+      for (let gridY = 0; gridY <= gridResolution; gridY++) {
+        const testX = gridX * stepX;
+        const testY = gridY * stepY;
+
+        // Ensure the circle stays within bounds
+        if (testX < radius || testX > width - radius ||
+            testY < radius || testY > height - radius) {
+          continue;
+        }
+
+        // Find the minimum distance to any existing circle center
+        let minDistanceToCircles = Infinity;
+        for (const circle of existingCircles) {
+          const distance = Math.sqrt((testX - circle.x) ** 2 + (testY - circle.y) ** 2);
+          minDistanceToCircles = Math.min(minDistanceToCircles, distance);
+        }
+
+        // Keep track of the position with the largest minimum distance
+        if (minDistanceToCircles > maxMinDistance) {
+          maxMinDistance = minDistanceToCircles;
+          bestPosition = { x: testX, y: testY };
+        }
+      }
+    }
+
+    // Add some randomness to the best position to avoid perfect grid alignment
+    const jitterAmount = Math.min(stepX, stepY) * 0.3;
+    bestPosition.x += (Math.random() - 0.5) * jitterAmount;
+    bestPosition.y += (Math.random() - 0.5) * jitterAmount;
+
+    // Ensure final position is still within bounds
+    bestPosition.x = Math.max(radius, Math.min(width - radius, bestPosition.x));
+    bestPosition.y = Math.max(radius, Math.min(height - radius, bestPosition.y));
+
+    return bestPosition;
+  }
+
+  function initCircles() {
+    circles = [];
+
+    // Calculate circle sizes based on the smaller screen dimension
+    // Circles should be between 25% and 50% of the smaller dimension (height or width)
+    const smallerDimension = Math.min(width, height);
+    const minRadius = smallerDimension * 0.25; // 25% of smaller dimension
+    const maxRadius = smallerDimension * 0.50; // 50% of smaller dimension
+
+    // Calculate a base radius within our constraints
+    const baseRadius = Math.min(Math.max(smallerDimension * 0.375, minRadius), maxRadius); // Default to 37.5% of smaller dimension, clamped
+
+    for (let i = 0; i < 4; i++) { // Fewer circles for cleaner look
+      // Create radius with variation but within our dimension constraints
+      const radiusVariation = 0.7 + Math.random() * 0.6; // 0.7 to 1.3 multiplier
+      const radius = Math.min(Math.max(baseRadius * radiusVariation, minRadius), maxRadius);
+
+      const position = findFarthestPosition(radius, circles);
+      const speedMultiplier = Math.random() * 2 + 0.5; // Slower movement
+      const vx = (Math.random() - 0.5) * speedMultiplier;
+      const vy = (Math.random() - 0.5) * speedMultiplier;
+
+      circles.push({
+        x: position.x,
+        y: position.y,
+        radius,
+        color: circleColors[i],
+        vx,
+        vy,
+        interactive: false,
+      });
+    }
+
+    // Interactive circle - also constrained by dimension limits
+    const interactiveRadius = Math.min(Math.max(baseRadius * 0.8, minRadius), maxRadius);
+    let interactivePosition = findFarthestPosition(interactiveRadius, circles);
+
+    circles.push({
+      x: interactivePosition.x,
+      y: interactivePosition.y,
+      radius: interactiveRadius,
+      color: circleColors[4],
+      vx: 0,
+      vy: 0,
+      interactive: true,
+    });
+  }
+
+  initCircles();
+
+  const vertexSrc = `
+    attribute vec2 a_position;
+    varying vec2 v_uv;
+    void main(void) {
+      v_uv = a_position * 0.5 + 0.5;
+      v_uv.y = 1.0 - v_uv.y;
+      gl_Position = vec4(a_position, 0.0, 1.0);
+    }
+  `;
+
+  const fragmentSrc = `
+precision mediump float;
+varying vec2 v_uv;
+
+uniform vec2 u_resolution;
+uniform bool u_darkMode;
+uniform int u_circleCount;
+uniform vec3 u_circlesColor[6];
+uniform vec3 u_circlesPosRad[6];
+uniform vec2 u_mouse;
+
+void main(void) {
+    vec2 st = v_uv * u_resolution;
+
+    // Background colors that match your design system
+    vec3 lightBg = vec3(250.0/255.0, 250.0/255.0, 250.0/255.0); // #FAFAFA
+    vec3 darkBg = vec3(10.0/255.0, 10.0/255.0, 10.0/255.0);     // #0A0A0A
+    vec3 bgColor = u_darkMode ? darkBg : lightBg;
+
+    float fieldSum = 0.0;
+    vec3 weightedColorSum = vec3(0.0);
+
+    for (int i = 0; i < 6; i++) {
+        if (i >= u_circleCount) { break; }
+        vec3 posRad = u_circlesPosRad[i];
+        vec2 cPos = vec2(posRad.r, posRad.g);
+        float radius = posRad.b;
+        float dist = length(st - cPos);
+        float sigma = radius * 0.4;
+        float val = exp(- (dist * dist) / (2.0 * sigma * sigma));
+        fieldSum += val;
+        weightedColorSum += u_circlesColor[i] * val;
+    }
+
+    vec3 finalCirclesColor = vec3(0.0);
+    if (fieldSum > 0.0) {
+      finalCirclesColor = weightedColorSum / fieldSum;
+    }
+
+    // More subtle blending for better readability - different opacity for light vs dark mode
+    float intensityMultiplier = u_darkMode ? 0.2 : 0.35; // Dark mode: subtle, Light mode: more visible
+    float intensity = pow(fieldSum, 1.8) * intensityMultiplier;
+    vec3 finalColor = mix(bgColor, finalCirclesColor, clamp(intensity, 0.0, 1.0));
+    gl_FragColor = vec4(finalColor, 1.0);
+}
+  `;
+
+  function createShader(type: number, source: string): WebGLShader | null {
+    const shader = gl.createShader(type);
+    if (!shader) {
+      console.error("Failed to create shader");
+      return null;
+    }
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      console.error("Shader compile error:", gl.getShaderInfoLog(shader));
+      gl.deleteShader(shader);
+      return null;
+    }
+    return shader;
+  }
+
+  const vertShader = createShader(gl.VERTEX_SHADER, vertexSrc);
+  const fragShader = createShader(gl.FRAGMENT_SHADER, fragmentSrc);
+
+  if (!vertShader || !fragShader) {
+    console.error("Failed to create shaders");
+    return;
+  }
+
+  const program = gl.createProgram();
+  if (!program) {
+    console.error("Failed to create program");
+    return;
+  }
+
+  gl.attachShader(program, vertShader);
+  gl.attachShader(program, fragShader);
+  gl.linkProgram(program);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    console.error("Program link error:", gl.getProgramInfoLog(program));
+    return;
+  }
+
+  gl.useProgram(program);
+
+  const quadBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, quadBuffer);
+  const vertices = new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]);
+  gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+  const a_position = gl.getAttribLocation(program, "a_position");
+  gl.enableVertexAttribArray(a_position);
+  gl.vertexAttribPointer(a_position, 2, gl.FLOAT, false, 0, 0);
+
+  const u_resolution = gl.getUniformLocation(program, "u_resolution");
+  const u_darkMode = gl.getUniformLocation(program, "u_darkMode");
+  const u_circleCount = gl.getUniformLocation(program, "u_circleCount");
+  const u_circlesColor = gl.getUniformLocation(program, "u_circlesColor");
+  const u_circlesPosRad = gl.getUniformLocation(program, "u_circlesPosRad");
+  const u_mouse = gl.getUniformLocation(program, "u_mouse");
+
+  gl.uniform2f(u_resolution, width, height);
+
+  // Listen for theme changes
+  function updateTheme() {
+    const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+    gl.uniform1i(u_darkMode, isDarkMode ? 1 : 0);
+  }
+
+  // Initial theme setup
+  updateTheme();
+
+  // Listen for theme toggle events
+  window.addEventListener('themeChange', updateTheme);
+
+  function updateCircles() {
+    for (let i = 0; i < circles.length; i++) {
+      const c = circles[i];
+      if (!c.interactive) {
+        c.x += c.vx;
+        c.y += c.vy;
+        if (c.x - c.radius > width) c.x = -c.radius;
+        if (c.x + c.radius < 0) c.x = width + c.radius;
+        if (c.y - c.radius > height) c.y = -c.radius;
+        if (c.y + c.radius < 0) c.y = height + c.radius;
+      } else {
+        c.x += (mouse.x - c.x) * 0.05; // More subtle follow
+        c.y += (mouse.y - c.y) * 0.05;
+      }
+    }
+  }
+
+  function drawDebugOverlay() {
+    if (!DEBUG_CIRCLES || !debugCtx) return;
+
+    // Clear previous debug overlay
+    debugCtx.clearRect(0, 0, width, height);
+
+    // Determine how many circles to show in debug based on mouse presence
+    const visibleCircleCount = mouseInViewport ? circles.length : circles.length - 1;
+
+    for (let i = 0; i < visibleCircleCount; i++) {
+      const c = circles[i];
+
+      // Draw square around circle
+      debugCtx.strokeStyle = c.interactive ? '#00ff00' : '#ffff00'; // Green for interactive, yellow for others
+      debugCtx.lineWidth = 2;
+      debugCtx.strokeRect(
+        c.x - c.radius,
+        c.y - c.radius,
+        c.radius * 2,
+        c.radius * 2
+      );
+
+      // Draw red dot at center
+      debugCtx.fillStyle = '#ff0000';
+      debugCtx.beginPath();
+      debugCtx.arc(c.x, c.y, 4, 0, Math.PI * 2);
+      debugCtx.fill();
+
+      // Add circle index label
+      debugCtx.fillStyle = '#ffffff';
+      debugCtx.font = '14px Arial';
+      debugCtx.fillText(`${i}`, c.x + 8, c.y - 8);
+    }
+  }
+
+  function render() {
+    updateCircles();
+
+    gl.viewport(0, 0, width, height);
+    gl.clearColor(0, 0, 0, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    gl.useProgram(program);
+
+    gl.uniform1i(u_circleCount, circles.length);
+    gl.uniform2f(u_resolution, width, height);
+    gl.uniform2f(u_mouse, mouse.x, mouse.y);
+
+    // Update dark mode state
+    const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+    gl.uniform1i(u_darkMode, isDarkMode ? 1 : 0);
+
+    let colorsArr: number[] = [];
+    let posRadArr: number[] = [];
+
+    // Determine how many circles to render based on mouse presence
+    const visibleCircleCount = mouseInViewport ? circles.length : circles.length - 1;
+
+    for (let i = 0; i < 6; i++) {
+      if (i < visibleCircleCount) {
+        const c = circles[i];
+        colorsArr.push(c.color[0], c.color[1], c.color[2]);
+        posRadArr.push(c.x, c.y, c.radius);
+      } else {
+        colorsArr.push(0, 0, 0);
+        posRadArr.push(0, 0, 0);
+      }
+    }
+
+    // Update the actual circle count uniform to match visible circles
+    gl.uniform1i(u_circleCount, visibleCircleCount);
+
+    gl.uniform3fv(u_circlesColor, new Float32Array(colorsArr));
+    gl.uniform3fv(u_circlesPosRad, new Float32Array(posRadArr));
+
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+    // Draw debug overlay if enabled
+    drawDebugOverlay();
+
+    requestAnimationFrame(render);
+  }
+
+  render();
+});
+</script>

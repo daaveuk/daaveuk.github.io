@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-
+import * as styles from "./styles/index.css"; // Adjust the import path as necessary
+import { Toggle } from "../Toggle";
 interface ThemeToggleProps {
   id?: string;
 }
@@ -41,39 +42,44 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ id }) => {
 
   const handleToggle = () => {
     if (window.toggleTheme) {
+      setIsDarkMode((prev) => !prev);
       window.toggleTheme();
     }
   };
 
   return (
     <div
-      className="theme-toggle-wrapper"
+      className={styles.wrapper}
       role="group"
       aria-labelledby="theme-toggle-label"
     >
       <span id="theme-toggle-label" className="sr-only">
         Theme selector
       </span>
-      <button
-        id={id}
-        className="theme-toggle"
-        onClick={handleToggle}
-        aria-label={`Switch to ${isDarkMode ? "light" : "dark"} mode`}
-        aria-pressed={isDarkMode}
-        type="button"
-      >
-        <span className="theme-toggle-track">
-          <span className="theme-toggle-thumb"></span>
-        </span>
-        <span className="theme-toggle-icons">
+      <div className={styles.toggleContainer}>
+        <label className={styles.checkBoxLabel} htmlFor="themeToggle-input">
           <span className="sun-icon" aria-hidden="true">
             ☀️
           </span>
+          <span id="theme-toggle-label-light-mode" className="sr-only">
+            Switch to dark mode
+          </span>
+        </label>
+        <Toggle
+          id={id || "themeToggle"}
+          checked={isDarkMode}
+          onChange={handleToggle}
+          rounded={true}
+        />
+        <label className={styles.checkBoxLabel} htmlFor="themeToggle-input">
           <span className="moon-icon" aria-hidden="true">
             🌙
           </span>
-        </span>
-      </button>
+          <span id="theme-toggle-label-light-mode" className="sr-only ">
+            Switch to light mode
+          </span>
+        </label>
+      </div>
     </div>
   );
 };
