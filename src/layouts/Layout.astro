@@ -14,6 +14,7 @@ const { title } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <slot />
     <script is:inline>
       // Theme management
@@ -48,13 +49,17 @@ const { title } = Astro.props;
 
 <style is:global>
   :root {
-    /* Light theme colors */
-    --color-body: #FFFFFE;
-    --color-background-accent: #EBECF0;
-    --color-text: #45525F;
-    --color-header-gradient: linear-gradient(142.5deg, #EBECF0 -0.86%, #FFFFFE 86.05%);
-    --color-button-gradient: linear-gradient(270deg, #f58555 0%, #e67272 100%);
-    --color-hover-shadow: #A9B2BB;
+    /* Light theme colors - WCAG AA compliant */
+    --color-body: #FFFFFF;
+    --color-background-accent: #E5E7EB;
+    --color-text: #374151;           /* Improved contrast ratio */
+    --color-text-muted: #6B7280;     /* For secondary text */
+    --color-header-gradient: linear-gradient(142.5deg, #E5E7EB -0.86%, #FFFFFF 86.05%);
+    --color-button-gradient: linear-gradient(270deg, #DC2626 0%, #B91C1C 100%); /* Better contrast */
+    --color-hover-shadow: #9CA3AF;
+    --color-focus-ring: #3B82F6;     /* Blue focus indicator */
+    --color-link: #1D4ED8;           /* High contrast link color */
+    --color-link-hover: #1E40AF;
 
     /* Typography */
     --font-family: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -65,7 +70,7 @@ const { title } = Astro.props;
     --font-weight-black: 900;
 
     /* Font sizes */
-    --font-size-xs: 0.8rem;
+    --font-size-xs: 0.875rem;
     --font-size-sm: 1rem;
     --font-size-base: 1rem;
     --font-size-lg: 1.25rem;
@@ -75,10 +80,11 @@ const { title } = Astro.props;
     --font-size-4xl: 4rem;
     --font-size-5xl: 5rem;
 
-    /* Line heights */
-    --line-height-tight: 1.2;
-    --line-height-normal: 1.5;
-    --line-height-relaxed: 1.75;
+    /* Line heights - WCAG AA compliant */
+    --line-height-tight: 1.3;     /* For large headings */
+    --line-height-normal: 1.5;    /* For body text (WCAG minimum) */
+    --line-height-relaxed: 1.6;   /* For improved readability */
+    --line-height-button: 3rem;
     --line-height-button: 3rem;
 
     /* Spacing scale */
@@ -121,13 +127,17 @@ const { title } = Astro.props;
   }
 
   [data-theme="dark"] {
-    /* Dark theme colors */
-    --color-body: #45525F;
-    --color-background-accent: #2A3541;
-    --color-text: #E9F0F8;
-    --color-header-gradient: linear-gradient(113.53deg, #2A3541 0%, rgba(57, 70, 83, 0) 86.04%);
-    --color-button-gradient: linear-gradient(270deg, #f58555 0%, #e67272 100%);
-    --color-hover-shadow: #0a0e13c4;
+    /* Dark theme colors - WCAG AA compliant */
+    --color-body: #111827;
+    --color-background-accent: #1F2937;
+    --color-text: #F9FAFB;            /* High contrast white text */
+    --color-text-muted: #D1D5DB;      /* For secondary text */
+    --color-header-gradient: linear-gradient(113.53deg, #1F2937 0%, rgba(31, 41, 55, 0) 86.04%);
+    --color-button-gradient: linear-gradient(270deg, #EF4444 0%, #DC2626 100%); /* Better contrast */
+    --color-hover-shadow: rgba(0, 0, 0, 0.8);
+    --color-focus-ring: #60A5FA;      /* Light blue focus indicator */
+    --color-link: #60A5FA;            /* High contrast link color */
+    --color-link-hover: #3B82F6;
   }
 
   *,
@@ -167,19 +177,91 @@ const { title } = Astro.props;
   }
 
   a {
-    color: var(--color-text);
+    color: var(--color-link);
     text-decoration: underline;
+    text-underline-offset: 0.2em;
+    transition: color 0.2s ease;
+  }
+
+  a:hover {
+    color: var(--color-link-hover);
+  }
+
+  a:focus {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Focus management for interactive elements */
+  button:focus,
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Improve contrast for placeholder text */
+  ::placeholder {
+    color: var(--color-text-muted);
+    opacity: 1;
+  }
+
+  /* Skip link for screen readers */
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: var(--color-focus-ring);
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    z-index: 1000;
+  }
+
+  .skip-link:focus {
+    top: 6px;
   }
 
   .hover-effect {
     position: relative;
-    transition: all 0.1s ease-in;
+    transition: all 0.2s ease;
     top: 0;
   }
 
-  .hover-effect:hover {
+  .hover-effect:hover,
+  .hover-effect:focus {
     top: -2px;
     box-shadow: 0 var(--space-base) var(--space-base) calc(-1 * var(--space-sm)) var(--color-hover-shadow);
+  }
+
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    .hover-effect {
+      transition: none;
+    }
+
+    .hover-effect:hover,
+    .hover-effect:focus {
+      top: 0;
+      box-shadow: 0 0 0 2px var(--color-focus-ring);
+    }
+  }
+
+  /* Screen reader only content */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
   /* Theme Toggle Styles */
@@ -227,6 +309,16 @@ const { title } = Astro.props;
     border-radius: 15px;
     width: 42px;
     height: 26px;
+    cursor: pointer;
+  }
+
+  .toggle-checkbox:focus {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  .toggle-checkbox:focus + .toggle-label-switch {
+    box-shadow: 0 0 0 2px var(--color-focus-ring);
   }
 
   .toggle-checkbox:checked + .toggle-label-switch::after {

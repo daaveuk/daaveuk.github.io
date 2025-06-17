@@ -27,8 +27,11 @@ const ThemeToggle = ({ id }) => {
   };
 
   return (
-    <div className="theme-toggle-wrapper">
-      <div className="toggle-label">
+    <div className="theme-toggle-wrapper" role="group" aria-labelledby="theme-toggle-label">
+      <span id="theme-toggle-label" className="sr-only">
+        Theme selection: {isDarkMode ? 'Dark mode' : 'Light mode'}
+      </span>
+      <div className="toggle-label" aria-hidden="true">
         <span role="img" aria-label="Sun Emoji">🌞</span>
       </div>
       <div className="toggle-container">
@@ -38,12 +41,17 @@ const ThemeToggle = ({ id }) => {
           className="toggle-checkbox"
           onChange={handleToggle}
           checked={isDarkMode}
+          aria-label={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
+          aria-describedby="theme-toggle-description"
         />
         <label htmlFor={id} className="toggle-label-switch" />
       </div>
-      <div className="toggle-label">
+      <div className="toggle-label" aria-hidden="true">
         <span role="img" aria-label="Moon Emoji">🌙</span>
       </div>
+      <span id="theme-toggle-description" className="sr-only">
+        Toggle between light and dark theme
+      </span>
     </div>
   );
 };

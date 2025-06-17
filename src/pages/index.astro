@@ -19,7 +19,8 @@ import { sendEmail } from '../functions/sendEmail.js';
   </Hero>
 
   <MainContent>
-    <div>
+    <section aria-labelledby="about-heading">
+      <h2 id="about-heading" class="sr-only">About me</h2>
       <p>
         I'm Dave, A quaint Yorkshireman living in Manchester. An
         experienced <strong>Principal Typescript Engineer</strong>, I'm passionate
@@ -29,19 +30,28 @@ import { sendEmail } from '../functions/sendEmail.js';
         I'm currently part of a great team building great products at{' '}
         <strong>Interactive Investor</strong>.
       </p>
-      <br />
+    </section>
+
+    <section aria-labelledby="contact-heading">
+      <h2 id="contact-heading" class="sr-only">Get in touch</h2>
       <p>Always happy for a chat! Why not drop me a line?</p>
       <Button href={sendEmail()}>
         <Emoji label="Email icon" symbol="📬" /> Get In Touch
       </Button>
+    </section>
+
+    <section aria-labelledby="social-heading">
+      <h2 id="social-heading" class="sr-only">Find me online</h2>
       <p>You can also find me here!</p>
-      <IconButton href="https://twitter.com/daaveuk/" icon="twitter" />
-      <IconButton
-        href="https://www.linkedin.com/in/daaveuk/"
-        icon="linkedin"
-      />
-      <IconButton href="https://github.com/daaveuk/" icon="github" />
-    </div>
+      <div role="list" aria-label="Social media links">
+        <IconButton href="https://twitter.com/daaveuk/" icon="twitter" />
+        <IconButton
+          href="https://www.linkedin.com/in/daaveuk/"
+          icon="linkedin"
+        />
+        <IconButton href="https://github.com/daaveuk/" icon="github" />
+      </div>
+    </section>
   </MainContent>
 
   <Footer>
