@@ -1,0 +1,338 @@
+---
+export interface Props {
+  title: string;
+}
+
+const { title }: Props = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <slot />
+    <script is:inline>
+      // Theme management
+      const getInitialTheme = () => {
+        const localTheme = localStorage.getItem('theme');
+        if (localTheme) {
+          return localTheme;
+        }
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      };
+
+      const applyTheme = (theme) => {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+      };
+
+      // Apply initial theme
+      applyTheme(getInitialTheme());
+
+      // Export theme functions to global scope
+      window.toggleTheme = () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        applyTheme(newTheme);
+
+        // Dispatch custom event for theme change
+        window.dispatchEvent(new CustomEvent('themeChange', { detail: { theme: newTheme } }));
+      };
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    /* Light theme colors - WCAG AA compliant */
+    --color-body: #FFFFFF;
+    --color-background-accent: #E5E7EB;
+    --color-text: #374151;           /* Improved contrast ratio */
+    --color-text-muted: #6B7280;     /* For secondary text */
+    --color-header-gradient: linear-gradient(142.5deg, #E5E7EB -0.86%, #FFFFFF 86.05%);
+    --color-button-gradient: linear-gradient(270deg, #DC2626 0%, #B91C1C 100%); /* Better contrast */
+    --color-hover-shadow: #9CA3AF;
+    --color-focus-ring: #3B82F6;     /* Blue focus indicator */
+    --color-link: #1D4ED8;           /* High contrast link color */
+    --color-link-hover: #1E40AF;
+
+    /* Typography */
+    --font-family: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-weight-thin: 100;
+    --font-weight-light: 300;
+    --font-weight-regular: 400;
+    --font-weight-bold: 700;
+    --font-weight-black: 900;
+
+    /* Font sizes */
+    --font-size-xs: 0.875rem;
+    --font-size-sm: 1rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.25rem;
+    --font-size-xl: 1.5rem;
+    --font-size-2xl: 2rem;
+    --font-size-3xl: 3rem;
+    --font-size-4xl: 4rem;
+    --font-size-5xl: 5rem;
+
+    /* Line heights - WCAG AA compliant */
+    --line-height-tight: 1.3;     /* For large headings */
+    --line-height-normal: 1.5;    /* For body text (WCAG minimum) */
+    --line-height-relaxed: 1.6;   /* For improved readability */
+    --line-height-button: 3rem;
+    --line-height-button: 3rem;
+
+    /* Spacing scale */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 0.75rem;
+    --space-base: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    --space-3xl: 4rem;
+    --space-4xl: 5rem;
+
+    /* Border radius */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
+    --radius-full: 50%;
+
+    /* Container and layout */
+    --container-max-width: 1440px;
+    --container-padding-mobile: var(--space-base);
+    --container-padding-desktop: var(--space-xl);
+
+    /* Breakpoints (for reference in media queries) */
+    --breakpoint-tablet: 768px;
+    --breakpoint-desktop: 1281px;
+
+    /* Component-specific sizes */
+    --button-height: var(--line-height-button);
+    --button-padding-x: var(--space-base);
+    --icon-button-size: var(--space-2xl);
+    --profile-picture-size: var(--space-3xl);
+
+    /* Borders */
+    --border-width-thin: 1px;
+    --border-width-medium: 2px;
+    --border-width-thick: 3px;
+  }
+
+  [data-theme="dark"] {
+    /* Dark theme colors - WCAG AA compliant */
+    --color-body: #111827;
+    --color-background-accent: #1F2937;
+    --color-text: #F9FAFB;            /* High contrast white text */
+    --color-text-muted: #D1D5DB;      /* For secondary text */
+    --color-header-gradient: linear-gradient(113.53deg, #1F2937 0%, rgba(31, 41, 55, 0) 86.04%);
+    --color-button-gradient: linear-gradient(270deg, #EF4444 0%, #DC2626 100%); /* Better contrast */
+    --color-hover-shadow: rgba(0, 0, 0, 0.8);
+    --color-focus-ring: #60A5FA;      /* Light blue focus indicator */
+    --color-link: #60A5FA;            /* High contrast link color */
+    --color-link-hover: #3B82F6;
+  }
+
+  *,
+  *::after,
+  *::before {
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html {
+    font-size: var(--font-size-base);
+  }
+
+  body {
+    background: var(--color-body);
+    color: var(--color-text);
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media (min-width: 768px) {
+    html {
+      font-size: 18px;
+    }
+  }
+
+  @media (min-width: 1281px) {
+    html {
+      font-size: 20px;
+    }
+  }
+
+  a {
+    color: var(--color-link);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    transition: color 0.2s ease;
+  }
+
+  a:hover {
+    color: var(--color-link-hover);
+  }
+
+  a:focus {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Focus management for interactive elements */
+  button:focus,
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Improve contrast for placeholder text */
+  ::placeholder {
+    color: var(--color-text-muted);
+    opacity: 1;
+  }
+
+  /* Skip link for screen readers */
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: var(--color-focus-ring);
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    z-index: 1000;
+  }
+
+  .skip-link:focus {
+    top: 6px;
+  }
+
+  .hover-effect {
+    position: relative;
+    transition: all 0.2s ease;
+    top: 0;
+  }
+
+  .hover-effect:hover,
+  .hover-effect:focus {
+    top: -2px;
+    box-shadow: 0 var(--space-base) var(--space-base) calc(-1 * var(--space-sm)) var(--color-hover-shadow);
+  }
+
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    .hover-effect {
+      transition: none;
+    }
+
+    .hover-effect:hover,
+    .hover-effect:focus {
+      top: 0;
+      box-shadow: 0 0 0 2px var(--color-focus-ring);
+    }
+  }
+
+  /* Screen reader only content */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Theme Toggle Styles */
+  .theme-toggle-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .toggle-label {
+    margin: 0 var(--space-xs);
+  }
+
+  .toggle-container {
+    position: relative;
+    display: inline-block;
+  }
+
+  .toggle-label-switch {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 47px;
+    height: 30px;
+    border-radius: 15px;
+    border: var(--border-width-thick) solid #e67272;
+    background-color: white;
+    cursor: pointer;
+  }
+
+  .toggle-label-switch::after {
+    content: '';
+    display: block;
+    border-radius: var(--radius-full);
+    width: 20px;
+    height: 20px;
+    margin: 2px;
+    background: var(--color-button-gradient);
+    transition: 0.2s;
+  }
+
+  .toggle-checkbox {
+    opacity: 0;
+    z-index: 1;
+    border-radius: 15px;
+    width: 42px;
+    height: 26px;
+    cursor: pointer;
+  }
+
+  .toggle-checkbox:focus {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  .toggle-checkbox:focus + .toggle-label-switch {
+    box-shadow: 0 0 0 2px var(--color-focus-ring);
+  }
+
+  .toggle-checkbox:checked + .toggle-label-switch::after {
+    content: '';
+    display: block;
+    border-radius: var(--radius-full);
+    width: 20px;
+    height: 20px;
+    background-color: #e67272;
+    margin-left: 19px;
+    transition: 0.2s;
+  }
+</style>

@@ -1,0 +1,55 @@
+---
+// MainContent component - static content
+---
+
+<main id="main-content">
+  <slot />
+</main>
+
+<style>
+  main {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-normal);
+    padding: 0 var(--container-padding-mobile) var(--space-xl);
+    margin: 0 auto;
+    max-width: var(--container-max-width);
+    flex: 1;
+  }
+
+  @media (min-width: 768px) {
+    main {
+      padding: 0 var(--container-padding-desktop) var(--space-xl);
+    }
+  }
+
+  /* Section spacing and structure */
+  section {
+    margin-bottom: var(--space-xl);
+  }
+
+  section:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Social media links container */
+  [role="list"] {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+    margin-top: var(--space-base);
+  }
+
+  /* Screen reader only headings */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>

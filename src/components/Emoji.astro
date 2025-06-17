@@ -1,0 +1,10 @@
+---
+export interface Props {
+  label: string;
+  symbol: string;
+}
+
+const { label, symbol }: Props = Astro.props;
+---
+
+<span role="img" aria-label={label}>{symbol}</span>

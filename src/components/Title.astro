@@ -1,0 +1,32 @@
+---
+export interface Props {
+  testId?: string;
+}
+
+const { testId }: Props = Astro.props;
+---
+
+<h1 data-testid={testId}><slot /></h1>
+
+<style>
+  h1 {
+    font-size: var(--font-size-3xl);
+    margin: 0;
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    color: var(--color-text);
+  }
+
+  @media (min-width: 768px) {
+    h1 {
+      font-size: var(--font-size-4xl);
+    }
+  }
+
+  @media (min-width: 1281px) {
+    h1 {
+      font-size: var(--font-size-5xl);
+    }
+  }
+</style>

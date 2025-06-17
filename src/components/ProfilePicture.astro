@@ -1,0 +1,32 @@
+---
+export interface Props {
+  src: string;
+  alt?: string;
+}
+
+const { src, alt = "Dave Henderson Profile Picture" }: Props = Astro.props;
+---
+
+<div class="profile-picture">
+  <img src={src} alt={alt} />
+</div>
+
+<style>
+  .profile-picture {
+    margin-right: var(--space-xl);
+    margin-bottom: var(--space-base);
+  }
+
+  .profile-picture img {
+    border-radius: var(--radius-full);
+    width: var(--profile-picture-size);
+    height: var(--profile-picture-size);
+    object-fit: cover;
+  }
+
+  @media (min-width: 768px) {
+    .profile-picture {
+      margin-bottom: 0;
+    }
+  }
+</style>

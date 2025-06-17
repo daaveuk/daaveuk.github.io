@@ -1,68 +1,80 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Dave Henderson - Personal Website
+
+Built with [Astro](https://astro.build) for optimal performance and SEO.
 
 ## Available Scripts
 
 In the project directory, you can run:
 
-### `npm start`
+### `npm run dev` or `npm start`
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Runs the app in development mode.  
+Open [http://localhost:4321](http://localhost:4321) to view it in the browser.
 
-The page will reload if you make edits.<br />
+The page will reload if you make edits.  
 You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Builds the app for production to the `dist` folder.  
+It correctly bundles and optimizes the build for the best performance with static site generation.
 
-The build is minified and the filenames include the hashes.<br />
+The build is minified and the filenames include the hashes.  
 Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### `npm run preview`
 
-### `npm run eject`
+Serves the production build locally for testing.  
+Run `npm run build` first, then this command to preview the built site.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### `npm test`
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Launches the test runner in the interactive watch mode.  
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## 🚀 Project Structure
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```
+/
+├── public/
+│   └── (static assets)
+├── src/
+│   ├── components/
+│   │   └── (Astro and React components)
+│   ├── layouts/
+│   │   └── Layout.astro
+│   ├── pages/
+│   │   └── index.astro
+│   └── functions/
+└── package.json
+```
 
-## Learn More
+## 🧞 Architecture
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+This site uses Astro for static site generation with minimal JavaScript. The only interactive component is the theme toggle, which uses React as an Astro island for optimal performance.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- **Framework**: Astro
+- **Styling**: CSS with custom properties for theming
+- **Interactivity**: React islands for components that need client-side state
+- **Deployment**: GitHub Pages via GitHub Actions
 
-### Code Splitting
+## 🌟 Features
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+- ⚡ Static site generation for optimal performance
+- 🎨 Dark/light theme toggle with system preference detection
+- 📱 Fully responsive design
+- ♿ Accessibility focused
+- 🔍 SEO optimized with automatic sitemap generation
+- 🚀 Minimal JavaScript bundle (only for theme toggle)
 
-### Analyzing the Bundle Size
+## 🔄 Migration from Create React App
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+This site was migrated from Create React App to Astro while maintaining the exact same visual appearance and functionality. See `ASTRO_MIGRATION.md` for detailed migration notes.
 
-### Making a Progressive Web App
+## 📦 Deployment
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+The site automatically deploys to GitHub Pages when changes are pushed to the `develop` branch. The deployment workflow:
 
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+1. Builds the site with `npm run build`
+2. Deploys the `dist/` folder to the `master` branch
+3. GitHub Pages serves the site from the `master` branch
