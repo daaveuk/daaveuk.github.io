@@ -1,10 +1,36 @@
-name: Lint
-on: pull_request
+name: Quality Checks
+on:
+  pull_request:
+    branches: [main, master]
+  push:
+    branches: [main, master]
+
 jobs:
-  eslint:
+  quality-checks:
     runs-on: ubuntu-latest
+    name: TypeScript, Tests & Linting
+
     steps:
-      - uses: actions/checkout@v1
-      - uses: stefanoeb/eslint-action@1.0.2
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          files: src/
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: TypeScript type checking
+        run: npx tsc --noEmit
+
+      - name: Run unit tests
+        run: npm run test:run
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Build project
+        run: npm run build

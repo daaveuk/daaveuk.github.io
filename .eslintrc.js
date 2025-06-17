@@ -1,9 +1,9 @@
 module.exports = {
-  parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint'],
+  parser: "@typescript-eslint/parser",
+  plugins: ["@typescript-eslint"],
   parserOptions: {
     ecmaVersion: 2020,
-    sourceType: 'module',
+    sourceType: "module",
     ecmaFeatures: {
       jsx: true,
     },
@@ -14,14 +14,14 @@ module.exports = {
     es6: true,
   },
   rules: {
-    'no-undef': 'off',
-    'no-unused-vars': 'off',
-    'prefer-const': 'error',
-    'no-var': 'error',
+    "no-undef": "off",
+    "no-unused-vars": "off",
+    "prefer-const": "error",
+    "no-var": "error",
   },
   overrides: [
     {
-      files: ['**/*.test.*', '**/*.spec.*'],
+      files: ["**/*.test.*", "**/*.spec.*"],
       env: {
         jest: true,
       },

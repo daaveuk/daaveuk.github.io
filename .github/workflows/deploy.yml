@@ -1,4 +1,4 @@
-name: deploy
+name: Deploy
 on:
   push:
     branches:
@@ -6,20 +6,39 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    name: Build, Test & Deploy
+
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           persist-credentials: false
 
-      - name: Install and Build 🔧
-        run: |
-          npm install
-          npm run build
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies 📦
+        run: npm ci --legacy-peer-deps
+
+      - name: TypeScript type checking 🔍
+        run: npx tsc --noEmit
+
+      - name: Run unit tests 🧪
+        run: npm run test:run
+
+      - name: Run linting 🔧
+        run: npm run lint
+
+      - name: Build project 🏗️
+        run: npm run build
 
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@releases/v3
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          BRANCH: master
-          FOLDER: dist
+          token: ${{ github.token }}
+          branch: master
+          folder: dist
+          clean: true
