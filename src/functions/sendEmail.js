@@ -1,4 +1,4 @@
-const sendEmail = () => {
+export const sendEmail = () => {
   const to = 'me+enquires@daave.co.uk';
   const subject = encodeURIComponent("Hi Dave, I'd like to get in touch!");
   const body = encodeURIComponent(`

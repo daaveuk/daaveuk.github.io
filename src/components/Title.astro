@@ -1,0 +1,28 @@
+---
+const { testId } = Astro.props;
+---
+
+<h1 data-testid={testId}>
+  <slot />
+</h1>
+
+<style>
+  h1 {
+    font-size: 3rem;
+    margin: 0;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  @media (min-width: 768px) {
+    h1 {
+      font-size: 4rem;
+    }
+  }
+
+  @media (min-width: 1281px) {
+    h1 {
+      font-size: 5rem;
+    }
+  }
+</style>

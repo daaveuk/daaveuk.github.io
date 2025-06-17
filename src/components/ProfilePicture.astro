@@ -1,0 +1,27 @@
+---
+const { src } = Astro.props;
+---
+
+<div class="profile-picture">
+  <img src={src} alt="Dave Henderson Profile Picture" />
+</div>
+
+<style>
+  .profile-picture {
+    margin-right: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .profile-picture img {
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  @media (min-width: 768px) {
+    .profile-picture {
+      margin-bottom: 0;
+    }
+  }
+</style>

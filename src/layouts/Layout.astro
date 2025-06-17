@@ -1,0 +1,174 @@
+---
+const { title } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <slot />
+    <script is:inline>
+      // Theme management
+      const getInitialTheme = () => {
+        const localTheme = localStorage.getItem('theme');
+        if (localTheme) {
+          return localTheme;
+        }
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      };
+
+      const applyTheme = (theme) => {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+      };
+
+      // Apply initial theme
+      applyTheme(getInitialTheme());
+
+      // Export theme functions to global scope
+      window.toggleTheme = () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        applyTheme(newTheme);
+        
+        // Dispatch custom event for theme change
+        window.dispatchEvent(new CustomEvent('themeChange', { detail: { theme: newTheme } }));
+      };
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    /* Light theme colors */
+    --color-body: #FFFFFE;
+    --color-background-accent: #EBECF0;
+    --color-text: #45525F;
+    --color-header-gradient: linear-gradient(142.5deg, #EBECF0 -0.86%, #FFFFFE 86.05%);
+    --color-button-gradient: linear-gradient(270deg, #f58555 0%, #e67272 100%);
+    --color-hover-shadow: #A9B2BB;
+  }
+
+  [data-theme="dark"] {
+    /* Dark theme colors */
+    --color-body: #45525F;
+    --color-background-accent: #2A3541;
+    --color-text: #E9F0F8;
+    --color-header-gradient: linear-gradient(113.53deg, #2A3541 0%, rgba(57, 70, 83, 0) 86.04%);
+    --color-button-gradient: linear-gradient(270deg, #f58555 0%, #e67272 100%);
+    --color-hover-shadow: #0a0e13c4;
+  }
+
+  *,
+  *::after,
+  *::before {
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body, html {
+    align-items: center;
+    background: var(--color-body);
+    color: var(--color-text);
+    margin: 0;
+    font-size: 16px;
+    font-family: 'Lato', sans-serif;
+    padding: 0;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  @media (min-width: 768px) {
+    body, html {
+      font-size: 18px;
+    }
+  }
+
+  @media (min-width: 1281px) {
+    body, html {
+      font-size: 20px;
+    }
+  }
+
+  a {
+    color: var(--color-text);
+    text-decoration: underline;
+  }
+
+  .hover-effect {
+    position: relative;
+    transition: all 0.1s ease-in;
+    top: 0;
+  }
+
+  .hover-effect:hover {
+    top: -2px;
+    box-shadow: 0 1rem 1rem -0.5rem var(--color-hover-shadow);
+  }
+
+  /* Theme Toggle Styles */
+  .theme-toggle-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .toggle-label {
+    margin: 0 0.3rem;
+  }
+
+  .toggle-container {
+    position: relative;
+    display: inline-block;
+  }
+
+  .toggle-label-switch {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 47px;
+    height: 30px;
+    border-radius: 15px;
+    border: 3px solid #e67272;
+    background-color: white;
+    cursor: pointer;
+  }
+
+  .toggle-label-switch::after {
+    content: '';
+    display: block;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    margin: 2px;
+    background: var(--color-button-gradient);
+    transition: 0.2s;
+  }
+
+  .toggle-checkbox {
+    opacity: 0;
+    z-index: 1;
+    border-radius: 15px;
+    width: 42px;
+    height: 26px;
+  }
+
+  .toggle-checkbox:checked + .toggle-label-switch::after {
+    content: '';
+    display: block;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    background-color: #e67272;
+    margin-left: 19px;
+    transition: 0.2s;
+  }
+</style>

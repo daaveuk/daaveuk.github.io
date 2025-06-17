@@ -1,0 +1,29 @@
+---
+// Footer component - static content except theme toggle
+---
+
+<footer>
+  <slot />
+</footer>
+
+<style>
+  footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    margin-top: 2rem;
+    gap: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    footer {
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 2rem;
+      max-width: 1440px;
+      margin: 2rem auto 0;
+    }
+  }
+</style>
