@@ -1,9 +1,7 @@
 name: E2E Tests (Cypress)
 on:
   pull_request:
-    branches: [main, master]
-  push:
-    branches: [main, master]
+    branches: [develop]
 
 jobs:
   e2e-tests:
