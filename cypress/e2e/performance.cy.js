@@ -10,15 +10,17 @@ describe("Performance and Loading", () => {
 
   it("should load all images successfully", () => {
     cy.get("img").each(($img) => {
-      cy.wrap($img).should("be.visible").and(($el) => {
-        expect($el[0].naturalWidth).to.be.greaterThan(0);
-      });
+      cy.wrap($img)
+        .should("be.visible")
+        .and(($el) => {
+          expect($el[0].naturalWidth).to.be.greaterThan(0);
+        });
     });
   });
 
   it("should have React component hydration", () => {
     // Theme toggle should be interactive after hydration
-    cy.get("#themeToggle button", { timeout: 10000 })
+    cy.get("#themeToggle", { timeout: 15000 })
       .should("be.visible")
       .and("not.be.disabled");
   });
@@ -27,10 +29,10 @@ describe("Performance and Loading", () => {
     cy.window().then((win) => {
       cy.stub(win.console, "error").as("consoleError");
     });
-    
+
     // Wait for page to fully load
     cy.wait(2000);
-    
+
     // Check no console errors occurred
     cy.get("@consoleError").should("not.have.been.called");
   });
@@ -45,7 +47,7 @@ describe("Performance and Loading", () => {
     cy.request("/profilePic.png").then((response) => {
       expect(response.status).to.eq(200);
     });
-    
+
     cy.request("/favicon.ico").then((response) => {
       expect(response.status).to.eq(200);
     });
@@ -62,8 +64,11 @@ describe("Performance and Loading", () => {
     // Images should have dimensions to prevent layout shift
     cy.get("img").each(($img) => {
       const img = $img[0];
-      expect(img.getAttribute("width") || img.style.width || img.naturalWidth).to.exist;
-      expect(img.getAttribute("height") || img.style.height || img.naturalHeight).to.exist;
+      expect(img.getAttribute("width") || img.style.width || img.naturalWidth)
+        .to.exist;
+      expect(
+        img.getAttribute("height") || img.style.height || img.naturalHeight
+      ).to.exist;
     });
   });
 

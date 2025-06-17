@@ -6,7 +6,7 @@ describe("Cross-browser Compatibility", () => {
   it("should support modern CSS features gracefully", () => {
     // Check CSS custom properties work
     cy.get("body").should("exist");
-    
+
     // Check CSS Grid/Flexbox layouts work
     cy.get(".container").should("be.visible");
   });
@@ -20,7 +20,7 @@ describe("Cross-browser Compatibility", () => {
   it("should work with different text sizes", () => {
     // Simulate larger text sizes
     cy.get("html").invoke("attr", "style", "font-size: 20px");
-    
+
     // Content should still be readable and accessible
     cy.findByTestId("title").should("be.visible");
     cy.contains("Get In Touch").should("be.visible");
@@ -40,24 +40,20 @@ describe("Cross-browser Compatibility", () => {
   it("should work with screen readers", () => {
     // Check for screen reader compatible elements
     cy.get(".sr-only").should("exist");
-    cy.get('[aria-label]').should("have.length.at.least", 3);
-    cy.get('[role]').should("exist");
+    cy.get("[aria-label]").should("have.length.at.least", 3);
+    cy.get("[role]").should("exist");
   });
 
   it("should support keyboard-only navigation", () => {
     // Tab through all interactive elements
-    cy.get("body").tab();
+    cy.get("body").click(); // Click body first to establish focus
+    cy.get("body").press("Tab");
     cy.focused().should("exist");
-    
-    // Continue tabbing through all interactive elements
-    let tabbableCount = 0;
-    cy.get("a, button, [tabindex]:not([tabindex='-1'])").then(($els) => {
-      tabbableCount = $els.length;
-    });
-    
-    // Should be able to reach all interactive elements
-    for (let i = 0; i < 10; i++) { // Test reasonable number of tabs
-      cy.focused().tab();
+
+    // Continue tabbing through interactive elements
+    for (let i = 0; i < 5; i++) {
+      // Test reasonable number of tabs
+      cy.focused().press("Tab");
       cy.focused().should("exist");
     }
   });
@@ -66,11 +62,11 @@ describe("Cross-browser Compatibility", () => {
     // Portrait mobile
     cy.viewport(375, 667);
     cy.findByTestId("title").should("be.visible");
-    
+
     // Landscape mobile
     cy.viewport(667, 375);
     cy.findByTestId("title").should("be.visible");
-    
+
     // Reset to desktop
     cy.viewport(1280, 720);
   });

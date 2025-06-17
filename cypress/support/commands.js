@@ -1,14 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import '@testing-library/cypress/add-commands';
-
-// Custom command for keyboard navigation testing
-Cypress.Commands.add('tab', { prevSubject: 'optional' }, (subject) => {
-  const el = subject ? cy.wrap(subject) : cy.focused();
-  return el.trigger('keydown', { key: 'Tab', code: 'Tab' });
-});
+import "@testing-library/cypress/add-commands";
 
 // Custom command for testing color contrast
-Cypress.Commands.add('checkContrast', (selector, options = {}) => {
+Cypress.Commands.add("checkContrast", (selector, options = {}) => {
   cy.get(selector).then(($el) => {
     const element = $el[0];
     const styles = window.getComputedStyle(element);
@@ -22,10 +16,10 @@ Cypress.Commands.add('checkContrast', (selector, options = {}) => {
 });
 
 // Custom command for checking if element is in viewport
-Cypress.Commands.add('isInViewport', (selector) => {
+Cypress.Commands.add("isInViewport", (selector) => {
   cy.get(selector).then(($el) => {
-    const bottom = Cypress.$(cy.state('window')).height();
-    const right = Cypress.$(cy.state('window')).width();
+    const bottom = Cypress.$(cy.state("window")).height();
+    const right = Cypress.$(cy.state("window")).width();
     const rect = $el[0].getBoundingClientRect();
 
     expect(rect.top).to.be.lessThan(bottom);
