@@ -10,15 +10,15 @@
   main {
     font-family: var(--font-family);
     font-weight: var(--font-weight-regular);
-    padding: 0 1rem 2rem;
+    padding: 0 var(--container-padding-mobile) var(--space-xl);
     margin: 0 auto;
-    max-width: 1440px;
+    max-width: var(--container-max-width);
     flex: 1;
   }
 
   @media (min-width: 768px) {
     main {
-      padding: 0 2rem 2rem;
+      padding: 0 var(--container-padding-desktop) var(--space-xl);
     }
   }
 </style>

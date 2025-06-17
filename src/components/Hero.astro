@@ -13,8 +13,8 @@
 <style>
   .container {
     text-align: left;
-    transform: translateY(2rem);
-    padding: 0 1rem;
+    transform: translateY(var(--space-xl));
+    padding: 0 var(--container-padding-mobile);
     display: flex;
     flex-direction: column;
     flex-grow: 0;
@@ -24,21 +24,21 @@
     .container {
       margin: 0 auto;
       flex-direction: column;
-      max-width: 1440px;
-      padding: 0 2rem;
+      max-width: var(--container-max-width);
+      padding: 0 var(--container-padding-desktop);
     }
   }
 
   .header-background {
     min-height: 6rem;
-    margin-bottom: 3rem;
+    margin-bottom: var(--space-2xl);
     background: var(--color-header-gradient);
   }
 
   @media (min-width: 768px) {
     .header-background {
       min-height: 9rem;
-      margin-bottom: 3rem;
+      margin-bottom: var(--space-2xl);
     }
   }
 </style>

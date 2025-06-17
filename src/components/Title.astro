@@ -8,22 +8,22 @@ const { testId } = Astro.props;
 
 <style>
   h1 {
-    font-size: 3rem;
+    font-size: var(--font-size-3xl);
     margin: 0;
     font-family: var(--font-family);
     font-weight: var(--font-weight-bold);
-    line-height: 1.2;
+    line-height: var(--line-height-tight);
   }
 
   @media (min-width: 768px) {
     h1 {
-      font-size: 4rem;
+      font-size: var(--font-size-4xl);
     }
   }
 
   @media (min-width: 1281px) {
     h1 {
-      font-size: 5rem;
+      font-size: var(--font-size-5xl);
     }
   }
 </style>

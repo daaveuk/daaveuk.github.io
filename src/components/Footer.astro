@@ -10,25 +10,25 @@
   footer {
     font-family: var(--font-family);
     font-weight: var(--font-weight-regular);
-    font-size: 0.8rem;
+    font-size: var(--font-size-xs);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 2rem 1rem;
+    padding: var(--space-xl) var(--container-padding-mobile);
     width: 100%;
-    gap: 0.5rem;
+    gap: var(--space-sm);
     margin-top: auto;
     background: var(--color-body);
-    border-top: 1px solid var(--color-background-accent);
+    border-top: var(--border-width-thin) solid var(--color-background-accent);
   }
 
   @media (min-width: 768px) {
     footer {
       flex-direction: row;
       justify-content: space-between;
-      padding: 2rem;
-      max-width: 1440px;
+      padding: var(--space-xl);
+      max-width: var(--container-max-width);
       margin-left: auto;
       margin-right: auto;
     }

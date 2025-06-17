@@ -21,20 +21,20 @@ const iconColors = {
 <style define:vars={{ iconColor: iconColors[icon] }}>
   .icon-button {
     line-height: 1;
-    width: 3rem;
-    height: 3rem;
+    width: var(--icon-button-size);
+    height: var(--icon-button-size);
     text-align: center;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     display: inline-block;
     color: white;
-    border: 1px solid var(--iconColor);
+    border: var(--border-width-thin) solid var(--iconColor);
     background: var(--iconColor);
-    padding: 0.75rem;
+    padding: var(--space-md);
     box-sizing: border-box;
   }
 
   .icon-button + .icon-button {
-    margin-left: 0.5rem;
+    margin-left: var(--space-sm);
   }
 
   .icon-button.github {

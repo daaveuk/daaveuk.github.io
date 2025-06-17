@@ -8,14 +8,14 @@ const { src } = Astro.props;
 
 <style>
   .profile-picture {
-    margin-right: 2rem;
-    margin-bottom: 1rem;
+    margin-right: var(--space-xl);
+    margin-bottom: var(--space-base);
   }
 
   .profile-picture img {
-    border-radius: 50%;
-    width: 4rem;
-    height: 4rem;
+    border-radius: var(--radius-full);
+    width: var(--profile-picture-size);
+    height: var(--profile-picture-size);
     object-fit: cover;
   }
 
