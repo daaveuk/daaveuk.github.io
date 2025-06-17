@@ -96,6 +96,9 @@
   },
   "devDependencies": {
     "@testing-library/cypress": "^7.0.1",
+    "@types/node": "^24.0.3",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
     "babel-eslint": "^9.0.0",
     "cypress": "^4.12.1",
     "eslint": "^5.16.0",
@@ -109,7 +112,8 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^1.7.0",
-    "prettier": "^1.19.1"
+    "prettier": "^1.19.1",
+    "typescript": "^5.8.3"
   },
   "jest": {
     "roots": [

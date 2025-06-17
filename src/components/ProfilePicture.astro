@@ -1,9 +1,14 @@
 ---
-const { src } = Astro.props;
+export interface Props {
+  src: string;
+  alt?: string;
+}
+
+const { src, alt = "Dave Henderson Profile Picture" }: Props = Astro.props;
 ---
 
 <div class="profile-picture">
-  <img src={src} alt="Dave Henderson Profile Picture" />
+  <img src={src} alt={alt} />
 </div>
 
 <style>
