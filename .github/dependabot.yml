@@ -1,0 +1,149 @@
+# Dependabot configuration for daaveuk.github.io
+# Automatically updates dependencies and creates pull requests for security fixes
+# See: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  # NPM dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/London"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "daaveuk"
+    assignees:
+      - "daaveuk"
+    commit-message:
+      prefix: "deps"
+      prefix-development: "deps-dev"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "automated-pr"
+    # Group related updates to reduce PR noise
+    groups:
+      # Astro framework and related packages
+      astro:
+        patterns:
+          - "astro"
+          - "@astrojs/*"
+        update-types:
+          - "minor"
+          - "patch"
+      # React ecosystem
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react*"
+        update-types:
+          - "minor"
+          - "patch"
+      # Testing frameworks and utilities
+      testing:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
+          - "cypress"
+          - "@testing-library/*"
+          - "jsdom"
+        update-types:
+          - "minor"
+          - "patch"
+      # TypeScript and ESLint tooling
+      dev-tooling:
+        patterns:
+          - "typescript"
+          - "@typescript-eslint/*"
+          - "eslint"
+          - "@types/*"
+        update-types:
+          - "minor"
+          - "patch"
+      # Build and development tools
+      build-tools:
+        patterns:
+          - "start-server-and-test"
+        update-types:
+          - "minor"
+          - "patch"
+    # Allow automatic merging for patch updates to reduce manual overhead
+    auto-merge:
+      - dependency-type: "direct:production"
+        update-type: "security"
+      - dependency-type: "direct:development"
+        update-type: "security"
+      - dependency-type: "indirect"
+        update-type: "security"
+    # Rebase strategy for better conflict resolution
+    rebase-strategy: "auto"
+    # Ignore specific packages that might cause breaking changes
+    ignore:
+      # Keep React at v17 for compatibility reasons until ready to upgrade
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+      # ESLint v5 is intentionally kept for compatibility
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+    # Target specific branches for updates
+    target-branch: "develop"
+
+  # GitHub Actions dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:30"
+      timezone: "Europe/London"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "daaveuk"
+    assignees:
+      - "daaveuk"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    labels:
+      - "github-actions"
+      - "ci/cd"
+      - "automated-pr"
+    # Group GitHub Actions updates
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    # Allow automatic security updates for actions
+    auto-merge:
+      - dependency-type: "direct"
+        update-type: "security"
+      - dependency-type: "indirect"
+        update-type: "security"
+    target-branch: "develop"
+
+# Security-only updates configuration
+# This ensures critical security vulnerabilities are addressed immediately
+# regardless of the normal update schedule
+
+# Enable security advisories
+enable-beta-ecosystems: false
+# Dependabot will automatically:
+# 1. Check for updates weekly on Mondays at 6:00 AM London time
+# 2. Create PRs with appropriate labels and assignees
+# 3. Group related dependencies to reduce PR noise
+# 4. Auto-merge security updates for faster vulnerability resolution
+# 5. Target the 'develop' branch to match your existing workflow
+# 6. Respect version constraints for major updates that might break compatibility
+# 7. Update GitHub Actions weekly to ensure CI/CD security
+#
+# This configuration is optimized for the Astro + TypeScript + React setup
+# and follows best practices for dependency management in JavaScript projects.
