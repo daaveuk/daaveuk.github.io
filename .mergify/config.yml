@@ -1,10 +1,12 @@
 pull_request_rules:
-  - name: merge pull requests from dependabot if CI passes
+  - name: merge pull requests from dependabot and daaveuk if CI passes
     conditions:
-      - author=dependabot-preview[bot]
-      - status-success="cypress-run"
-      - status-success="eslint"
+      - author~=^(dependabot(\\[bot\\])?|daaveuk)$
+      - check-success="check"
+      - check-success="coverage"
+      - check-success="cypress"
+      - "#approved-reviews-by>=0"
+      - "#changes-requested-reviews-by=0"
     actions:
       merge:
         method: merge
-        strict: true
